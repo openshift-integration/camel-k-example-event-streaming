@@ -15,6 +15,7 @@ public class TimelineBridge extends RouteBuilder {
         restConfiguration()
                 .component("netty-http")
                 .host("0.0.0.0")
+                .enableCORS(true)
                 .port("8080");
 
         rest("/")

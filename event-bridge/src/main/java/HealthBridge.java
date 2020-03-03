@@ -97,6 +97,7 @@ public class HealthBridge extends RouteBuilder {
 
     public static class Alert {
         private String text;
+        private String severity;
 
         public String getText() {
             return text;
@@ -104,6 +105,14 @@ public class HealthBridge extends RouteBuilder {
 
         public void setText(String text) {
             this.text = text;
+        }
+
+        public String getSeverity() {
+            return severity;
+        }
+
+        public void setSeverity(String severity) {
+            this.severity = severity;
         }
     }
 
@@ -132,6 +141,7 @@ public class HealthBridge extends RouteBuilder {
                     Alert alert = new Alert();
 
                     alert.setText(text);
+                    alert.setSeverity("yellow");
 
                     ObjectMapper mapper = new ObjectMapper();
                     String body = mapper.writeValueAsString(alert);

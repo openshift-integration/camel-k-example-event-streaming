@@ -96,6 +96,7 @@ public class CrimeBridge extends RouteBuilder {
 
     public static class Alert {
         private String text;
+        private String severity;
 
         public String getText() {
             return text;
@@ -103,6 +104,14 @@ public class CrimeBridge extends RouteBuilder {
 
         public void setText(String text) {
             this.text = text;
+        }
+
+        public String getSeverity() {
+            return severity;
+        }
+
+        public void setSeverity(String severity) {
+            this.severity = severity;
         }
     }
 
@@ -120,15 +129,20 @@ public class CrimeBridge extends RouteBuilder {
                 .unmarshal(dataFormat)
                 .process(exchange -> {
                     CrimeBridge.Data eventData = exchange.getMessage().getBody(Data.class);
+                    CrimeBridge.Alert alert = new CrimeBridge.Alert();
 
                     if (eventData.getReport().isAlert()) {
                         exchange.getMessage().setHeader(unsafeHeader, true);
+
+                        alert.setSeverity("red");
+                    }
+                    else {
+                        alert.setSeverity("yellow");
                     }
 
                     String text = String.format("There is a %s incident on %s", eventData.getReport().getMeasurement(),
                             eventData.getReport().getLocation());
 
-                    CrimeBridge.Alert alert = new CrimeBridge.Alert();
 
                     alert.setText(text);
 

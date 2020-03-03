@@ -135,6 +135,7 @@ public class PollutionBridge extends RouteBuilder {
 
     public static class Alert {
         private String text;
+        private String severity;
 
         public String getText() {
             return text;
@@ -142,6 +143,14 @@ public class PollutionBridge extends RouteBuilder {
 
         public void setText(String text) {
             this.text = text;
+        }
+
+        public String getSeverity() {
+            return severity;
+        }
+
+        public void setSeverity(String severity) {
+            this.severity = severity;
         }
     }
 
@@ -171,6 +180,8 @@ public class PollutionBridge extends RouteBuilder {
                     PollutionData pollutionData = exchange.getMessage().getBody(PollutionData.class);
                     LOG.info("Processing pollution data for city {} ", pollutionData.getCity());
 
+                    Alert alert = new Alert();
+
                     if (pollutionData.getParameter().equals("pm10")) {
                         if (pollutionData.getValue() > 25.0) {
                             LOG.info("City {} exceeds the maximum safe levels for PM 10 exposure",
@@ -179,8 +190,10 @@ public class PollutionBridge extends RouteBuilder {
 
                             if (pollutionData.getValue() > 50.0) {
                                 exchange.getMessage().setHeader(unsafeTypeHeader, SHORT_TERM);
+                                alert.setSeverity("red");
                             } else {
                                 exchange.getMessage().setHeader(unsafeTypeHeader, LONG_TERM);
+                                alert.setSeverity("yellow");
                             }
                         }
 
@@ -197,8 +210,10 @@ public class PollutionBridge extends RouteBuilder {
 
                             if (pollutionData.getValue() > 25.0) {
                                 exchange.getMessage().setHeader(unsafeTypeHeader, SHORT_TERM);
+                                alert.setSeverity("red");
                             } else {
                                 exchange.getMessage().setHeader(unsafeTypeHeader, LONG_TERM);
+                                alert.setSeverity("yellow");
                             }
                         }
 
@@ -207,7 +222,7 @@ public class PollutionBridge extends RouteBuilder {
                     }
 
 
-                    Alert alert = new Alert();
+
                     alert.setText(text);
 
                     ObjectMapper mapper = new ObjectMapper();

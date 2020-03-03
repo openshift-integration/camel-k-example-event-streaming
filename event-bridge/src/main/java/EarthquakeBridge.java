@@ -320,6 +320,7 @@ public class EarthquakeBridge extends RouteBuilder {
 
     public static class Alert {
         private String text;
+        private String severity;
 
         public String getText() {
             return text;
@@ -327,6 +328,14 @@ public class EarthquakeBridge extends RouteBuilder {
 
         public void setText(String text) {
             this.text = text;
+        }
+
+        public String getSeverity() {
+            return severity;
+        }
+
+        public void setSeverity(String severity) {
+            this.severity = severity;
         }
     }
 
@@ -353,7 +362,7 @@ public class EarthquakeBridge extends RouteBuilder {
 
 
 
-                    if (alert != null || magnitude > 2.5 || tsunami != 0) {
+                    if (alert != null || magnitude > 4.0 || tsunami != 0) {
                         Alert alertMessage = new Alert();
                         alertMessage.setText("Critical geological event: " + feature.getProperties().getTitle());
 
@@ -364,6 +373,8 @@ public class EarthquakeBridge extends RouteBuilder {
                         if (tsunami != 0) {
                             text = text + " with possibility of tsunami";
                         }
+
+                        alertMessage.setSeverity("red");
                         alertMessage.setText(text);
 
                         ObjectMapper mapper = new ObjectMapper();
