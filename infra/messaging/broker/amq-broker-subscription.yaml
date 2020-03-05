@@ -1,13 +1,37 @@
+apiVersion: v1
+items:
+- apiVersion: operators.coreos.com/v1
+  kind: OperatorGroup
+  metadata:
+    annotations:
+      olm.providedAPIs: ActiveMQArtemis.v2alpha1.broker.amq.io,ActiveMQArtemisAddress.v2alpha1.broker.amq.io,ActiveMQArtemisScaledown.v2alpha1.broker.amq.io
+    creationTimestamp: "2020-02-26T14:07:20Z"
+    generateName: event-streaming-messaging-broker-dev-
+    generation: 1
+    name: event-streaming-messaging-broker-dev-tx4wd
+    namespace: event-streaming-messaging-broker-dev
+    resourceVersion: "164848623"
+  spec:
+    targetNamespaces:
+    - event-streaming-messaging-broker-dev
+  status:
+    lastUpdated: "2020-02-26T14:07:20Z"
+    namespaces:
+    - event-streaming-messaging-broker-dev
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+  
+--- 
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
+  creationTimestamp: '2020-02-25T10:40:59Z'
   generation: 1
   name: amq-broker
   namespace: event-streaming-messaging-broker-dev
   resourceVersion: '164848592'
-  selfLink: >-
-    /apis/operators.coreos.com/v1alpha1/namespaces/event-streaming-messaging-broker-dev/subscriptions/amq-broker
-  uid: 4df1d20c-58a1-11ea-81fa-060792c44080
 spec:
   channel: alpha
   installPlanApproval: Automatic
