@@ -1,1 +1,1 @@
-# camel-k-example-event-streaming
+README.didact.md

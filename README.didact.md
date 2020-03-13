@@ -138,12 +138,6 @@ To create a new project run the following command:
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20event-streaming-messaging-broker&completion=Created%20new%20project%20for%20running%20the%20AMQ%20Broker. "Create project for running AMQ Broker"){.didact})
 
-To ensure we are on the correct project, we can run:
-
-```oc project event-streaming-messaging-broker```
-
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20project%20event-streaming-messaging-broker&completion=Switch%20to%20the%20AMQ%20Broker%20project. "Switch to the AMQ Broker project"){.didact})
-
 To install the AMQ Broker operator, we subscribe to the AMQ Broker channel with the following command:
 
 ```cat infra/messaging/broker/amq-broker-subscription.yaml | sed 's/event-streaming-messaging-broker-dev/event-streaming-messaging-broker/' | oc apply -f -```
@@ -356,7 +350,7 @@ var url = "http://timeline-bridge.camel-k-event-streaming-dev.my.host.net" + pat
 
 After that, save the file and continue.
 
-If you have Python installed you can execute the following: 
+If you have Python installed you can execute the following:
 
 ```cd front-end/src/main/resources/site ; python -m SimpleHTTPServer 8000```
 
@@ -366,7 +360,7 @@ If you have Python installed you can execute the following:
 Then access the [front-end](http://localhost:8080).
 
 
-[Click here to stop the server](didact://?commandId=vscode.didact.sendNamedTerminalCtrlC&text=webServer "Send `Ctrl+C` to the terminal window."){.didact} 
+[Click here to stop the server](didact://?commandId=vscode.didact.sendNamedTerminalCtrlC&text=webServer "Send `Ctrl+C` to the terminal window."){.didact}
 
 
 If you don't have Python installed, you can just open the file in a brower.
