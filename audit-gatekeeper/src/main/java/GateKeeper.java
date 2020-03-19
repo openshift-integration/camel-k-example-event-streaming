@@ -1,3 +1,5 @@
+// camel-k: language=java
+
 import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
