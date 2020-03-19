@@ -1,3 +1,5 @@
+// camel-k: language=java
+
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

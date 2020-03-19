@@ -1,3 +1,5 @@
+// camel-k: language=java
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.camel.PropertyInject;
