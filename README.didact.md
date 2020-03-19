@@ -74,7 +74,7 @@ The system consumes data from sources such as OpenAQ API (an open API that is us
 USGS Earthquake Hazards Program, etc to consume data about hazards and present information about them and warn the user
 when certain incidents happen.
 
-![Diagram](docs/Diagram.png)
+![Diagram](https://raw.githubusercontent.com/openshift-integration/camel-k-example-event-streaming/master/docs/Diagram.png)
 
 ## Installing the AMQ Streams Cluster
 
