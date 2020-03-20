@@ -7,11 +7,11 @@ items:
       olm.providedAPIs: ActiveMQArtemis.v2alpha1.broker.amq.io,ActiveMQArtemisAddress.v2alpha1.broker.amq.io,ActiveMQArtemisScaledown.v2alpha1.broker.amq.io
     generation: 1
     name: event-streaming-messaging-broker-sub
-    namespace: event-streaming-messaging-broker-dev
+    namespace: event-streaming-messaging-broker
     resourceVersion: "164848623"
   spec:
     targetNamespaces:
-    - event-streaming-messaging-broker-dev
+    - event-streaming-messaging-broker
 kind: List
 metadata:
   resourceVersion: ""
@@ -23,7 +23,7 @@ kind: Subscription
 metadata:
   generation: 1
   name: amq-broker
-  namespace: event-streaming-messaging-broker-dev
+  namespace: event-streaming-messaging-broker
   resourceVersion: '164848592'
 spec:
   channel: alpha

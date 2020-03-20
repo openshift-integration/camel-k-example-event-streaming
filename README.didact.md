@@ -147,16 +147,18 @@ To create a new project run the following command:
 
 To install the AMQ Broker operator, we subscribe to the AMQ Broker channel with the following command:
 
-```cat infra/messaging/broker/amq-broker-subscription.yaml | sed 's/event-streaming-messaging-broker-dev/event-streaming-messaging-broker/' | oc apply -f -```
+```oc apply -f infra/messaging/broker/amq-broker-subscription.yaml```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$cat%20infra%2Fmessaging%2Fbroker%2Famq-broker-subscription.yaml%20%7C%20sed%20%27s%2Fevent-streaming-messaging-broker-dev%2Fevent-streaming-messaging-broker%2F%27%20%7C%20oc%20apply%20-f%20-&completion=Subscribe%20to%20the%20AMQ%20Broker%20channel. "Subscribe to the AMQ Broker channel"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20-f%20infra%2Fmessaging%2Fbroker%2Famq-broker-subscription.yaml&completion=Subscribed%20to%20the%20AMQ%20Broker%20channel. "Subscribes to the AMQ Broker channel"){.didact})
+
 
 With the operator installed and running on the project, then we can proceed and create the broker instance:
 
 
-```cat infra/messaging/broker/instances/amq-broker-instance.yaml | sed 's/event-streaming-messaging-broker-dev/event-streaming-messaging-broker/' | oc create -f -```
+```oc create -f infra/messaging/broker/instances/amq-broker-instance.yaml```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$cat%20infra%2Fmessaging%2Fbroker%2Finstances%2Famq-broker-instance.yaml%20%7C%20sed%20%27s%2Fevent-streaming-messaging-broker-dev%2Fevent-streaming-messaging-broker%2F%27%20%7C%20oc%20create%20-f%20-&completion=Create%20the%20AMQ%20Broker%20instance. "Create the AMQ Broker instance"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20-f%20infra%2Fmessaging%2Fbroker%2Finstances%2Famq-broker-instance.yaml&completion=Created%20AMQ%20Broker%20instance. "Creates the AMQ Broker instance"){.didact})
+
 
 We can use the `oc get activemqartermis` command to check if the AMQ Broker instance is created:
 
