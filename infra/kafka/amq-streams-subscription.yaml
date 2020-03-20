@@ -7,11 +7,11 @@ items:
       olm.providedAPIs: Kafka.v1beta1.kafka.strimzi.io,KafkaBridge.v1alpha1.kafka.strimzi.io,KafkaConnect.v1beta1.kafka.strimzi.io,KafkaConnectS2I.v1beta1.kafka.strimzi.io,KafkaMirrorMaker.v1beta1.kafka.strimzi.io,KafkaTopic.v1beta1.kafka.strimzi.io,KafkaUser.v1beta1.kafka.strimzi.io
     generation: 1
     name: event-streaming-kafka-cluster-sub
-    namespace: event-streaming-kafka-cluster-dev
+    namespace: event-streaming-kafka-cluster
     resourceVersion: "171869631"
   spec:
     targetNamespaces:
-    - event-streaming-kafka-cluster-dev
+    - event-streaming-kafka-cluster
 kind: List
 metadata:
   resourceVersion: ""
@@ -23,7 +23,7 @@ kind: Subscription
 metadata:
   generation: 1
   name: amq-streams
-  namespace: event-streaming-kafka-cluster-dev
+  namespace: event-streaming-kafka-cluster
   resourceVersion: '163935636'
 spec:
   channel: stable
