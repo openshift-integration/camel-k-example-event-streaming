@@ -178,9 +178,9 @@ If it was successfully created, then we can create the addresses and queues requ
 
 Now that the infrastructure is ready, we can go ahead and deploy the demo project. First, lets create a project for running the demo:
 
-```oc get project camel-k-event-streaming || oc new-project camel-k-event-streaming```
+```oc new-project camel-k-event-streaming```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20project%20camel-k-event-streaming%20%7C%7C%20oc%20new-project%20camel-k-event-streaming&completion=Switched%20to%20the%20demo%20project. "Switched to the demo project"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20camel-k-event-streaming&completion=Switched%20to%20the%20demo%20project. "Switched to the demo project"){.didact})
 
 You need to be able to admin the project to run the demo. [Click here to verify your permissions.](didact://?commandId=vscode.didact.requirementCheck&text=permissions-project-check$$oc%20auth%20can-i%20admin%20project$$yes&completion=Verified%20that%20the%20you%20have%20correct%20permissions. "Verifies if you can admin the project"){.didact}
 
