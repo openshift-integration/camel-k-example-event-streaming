@@ -196,9 +196,9 @@ You need to be able to admin the project to run the demo. [Click here to verify 
 
 Before we start running the demo, there's one last operator we need to install: the one used by Camel-K.
 
-```kamel install -n camel-k-event-streaming```
+```kamel install```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20install%20-n%20camel-k-event-streaming&completion=Install%20Camel-K. "Install Camel-K"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20install&completion=Install%20Camel-K. "Install Camel-K"){.didact})
 
 ## Deploying the Project
 
