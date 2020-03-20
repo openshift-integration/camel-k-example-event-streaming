@@ -42,6 +42,7 @@ access all Camel K features.
 
 *Status: unknown*{#kamel-requirements-status}
 
+**Knative installed on the OpenShift cluster**
 
 The cluster also needs to have Knative installed and working.
 
@@ -49,6 +50,11 @@ The cluster also needs to have Knative installed and working.
 
 *Status: unknown*{#kservice-project-check}
 
+**Local OpenSSL Installation**
+
+[Check if the OpenSSL is installed](didact://?commandId=vscode.didact.requirementCheck&text=openssl-project-check$$openssl%20version$$OpenSSL&completion=Verified%20OpenSSL%20installation. "Verifies OpenSSL installation"){.didact}
+
+*Status: unknown*{#openssl-project-check}
 
 
 ### Optional Requirements
