@@ -73,13 +73,6 @@ You can install it from the VS Code Extensions marketplace.
 
 *Status: unknown*{#extension-requirement-status}
 
-**Python**
-
-Python is used to launch a local web server to display the HTML. It can also be skipped if not available.
-
-[Check if the Python is installed](didact://?commandId=vscode.didact.requirementCheck&text=python-requirements-status$$python%20--version$$Python&completion=Python%20is%20available%20on%20this%20system. "Tests to see if `python --version` returns a result"){.didact}
-
-*Status: unknown*{#kamel-requirements-status}
 
 ## Understanding the Demo Scenario
 
@@ -103,18 +96,17 @@ execute the following command:
 
 That creates a secluded space where AMQ Streams can run. To deploy it, we subscribe to the AMQ Streams channel by using the following command:
 
-```cat infra/kafka/amq-streams-subscription.yaml | sed 's/event-streaming-kafka-cluster-dev/event-streaming-kafka-cluster/' | oc apply -f -```
+```oc apply -f infra/kafka/amq-streams-subscription.yaml```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$cat%20infra%2Fkafka%2Famq-streams-subscription.yaml%20%7C%20sed%20%27s%2Fevent-streaming-kafka-cluster-dev%2Fevent-streaming-kafka-cluster%2F%27%20%7C%20oc%20apply%20-f%20-&completion=AMQ%20Streams%20channel%20subscription%20created. "Subscribed to the AMQ Streams channel"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fkafka%2Famq-streams-subscription.yaml&completion=Subscribed%20to%20the%20AMQ%20Streams%20channel. "Subscribes to the AMQ Streams channel"){.didact})
 
 This creates a subscription named amq-streams running on the `event-streaming-kafka-cluster` project.
 
 The next step is to create use the operator to create an AMQ Streams cluster. This can be done with the command:
 
-```cat infra/kafka/clusters/event-streaming-cluster.yaml | sed 's/event-streaming-kafka-cluster-dev/event-streaming-kafka-cluster/' | oc create -n event-streaming-kafka-cluster -f -```
+```oc create -f infra/kafka/clusters/event-streaming-cluster.yaml```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$cat%20infra%2Fkafka%2Fclusters%2Fevent-streaming-cluster.yaml%20%7C%20sed%20%27s%2Fevent-streaming-kafka-cluster-dev%2Fevent-streaming-kafka-cluster%2F%27%20%7C%20oc%20create%20-n%20event-streaming-kafka-cluster%20-f%20-&completion=AMQ%20Streams%20cluster%20created. "Created AMQ Streams cluster"){.didact})
-
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20-f%20infra%2Fkafka%2Fclusters%2Fevent-streaming-cluster.yaml&completion=Created%20the%20AMQ%20Streams%20cluster. "Creates the AMQ Streams cluster"){.didact})
 
 Depending on how large is you OpenShift cluster, this may take a little. Let's run this command and wait until the cluster is up and running.
 
@@ -136,9 +128,9 @@ Once the AMQ Streams cluster is created. We can proceed to the creation of the A
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fkafka%2Fclusters%2Ftopics%2F&completion=Created%20topics. "Create topics"){.didact})
 
-```oc get kt```
+```oc get kafkatopics```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20kt&completion=Collected%20Kafka%20topics. "Collect Kafka topics"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20kafkatopics&completion=Collected%20Kafka%20topics. "Collect Kafka topics"){.didact})
 
 At this point, if all goes well, we should our AMQ Streams cluster up and running with several topics.
 

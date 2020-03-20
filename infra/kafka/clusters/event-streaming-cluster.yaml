@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta1
 kind: Kafka
 metadata:
-  name: event-streaming-kafka-cluster-dev
+  name: event-streaming-kafka-cluster
 spec:
   kafka:
     replicas: 1
