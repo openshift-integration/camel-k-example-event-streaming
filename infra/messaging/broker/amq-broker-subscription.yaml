@@ -1,16 +1,13 @@
-apiVersion: v1
-items:
-- apiVersion: operators.coreos.com/v1
-  kind: OperatorGroup
-  metadata:
-    annotations:
-      olm.providedAPIs: ActiveMQArtemis.v2alpha1.broker.amq.io,ActiveMQArtemisAddress.v2alpha1.broker.amq.io,ActiveMQArtemisScaledown.v2alpha1.broker.amq.io
-    name: event-streaming-messaging-broker-sub
-    namespace: event-streaming-messaging-broker
-  spec:
-    targetNamespaces:
-    - event-streaming-messaging-broker
-
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  annotations:
+    olm.providedAPIs: ActiveMQArtemis.v2alpha1.broker.amq.io,ActiveMQArtemisAddress.v2alpha1.broker.amq.io,ActiveMQArtemisScaledown.v2alpha1.broker.amq.io
+  name: event-streaming-messaging-broker-sub
+  namespace: event-streaming-messaging-broker
+spec:
+  targetNamespaces:
+  - event-streaming-messaging-broker
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
