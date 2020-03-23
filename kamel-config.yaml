@@ -1,0 +1,29 @@
+kamel:
+  run:
+    integration:
+      crime-bridge:
+        property-files: '[config/application.properties]'
+        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.10.1]'
+      earthquake-bridge:
+        property-files: '[config/application.properties]'
+        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.10.1]'
+      earthquake-consumer:
+        dependencies: '[camel-bean,camel-jackson]'
+        property-files: '[config/application.properties]'
+      gate-keeper:
+        dependencies: '[camel-direct]'
+      health-bridge:
+        property-files: '[config/application.properties]'
+        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.10.1]'
+      open-aq-consumer:
+        dependencies: '[camel-bean,camel-jackson]'
+        property-files: '[config/application.properties]'
+      pollution-bridge:
+        property-files: '[config/application.properties]'
+        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.10.1]'
+      timeline-bridge:
+        property-files: '[config/application.properties]'
+        dependencies: '[camel-jackson,camel-direct,camel-rest,camel-netty-http]'
+      user-report-system:
+        dependencies: '[camel-direct,camel-jackson,camel-rest,camel-netty-http]'
+        secrets: '[example-event-streaming-user-reporting]'
