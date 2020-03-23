@@ -224,29 +224,16 @@ kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-brokers.event-stream
 messaging.broker.url=tcp://broker-hdls-svc.event-streaming-messaging-broker:61616
 ```
 
-#### Optional: Adjustments to the Secret
-
-*Note*: you can skip this step if you don't want to adjust the secrets
+#### Creating the Secret
 
 One of the components simulates receiving data from users and, in order to do so, authenticate the users. Because we normally don't want the credentials to be easily
 accessible, it simulates checking the access control by reading a secret.
 
-To create the secret, we can open the file [./config/application.properties](didact://?commandId=vscode.open&projectFilePath=./config/application.properties&newWindow=false&completion=Ok. "Edit the secret configuration"){.didact} and adjust the parameters `kafka.bootstrap.address` and the `messaging.broker.url` so that they are the same ones we setup previously. Then we need to encode the file to `base64` using the `openssl` command:
-
-```cat config/application.properties | openssl base64```
-
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$cat%20config%2Fapplication.properties%7C%20openssl%20base64&completion=Encrypted%20the%20configuration. "Encrypted the configuration"){.didact})
-
-
-We have to copy the encoded output and add it to the data section. It is *very* import to retain the indentation of the file, otherwise applications won't be able to read it. We can open the file [./config/demo-config-with-secret.yaml](didact://?commandId=vscode.open&projectFilePath=./config/demo-config-with-secret.yaml&newWindow=false&completion=Ok. "Edit the secret file"){.didact}, paste the base64 encrypted configuration and save the file.
-
-#### Creating the Secret
-
 We can push the secret to the cluster using the following command:
 
-```oc apply -f config/demo-config-with-secret.yaml```
+```oc create secret generic example-event-streaming-user-reporting --from-file config/application.properties```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20config%2Fdemo-config-with-secret.yaml&completion=Create%20the%20encrypted%20configuration. "Create the encrypted configuration"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20secret%20generic%20example-event-streaming-user-reporting%20--from-file%20config%2Fapplication.properties&completion=Created%20the%20secret%20configuration. "Creates the secret configuration"){.didact})
 
 With this configuration secret created on the cluster, we have completed the initial steps to get the demo running.
 
