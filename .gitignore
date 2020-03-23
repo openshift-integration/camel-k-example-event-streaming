@@ -1,0 +1,7 @@
+/.vscode/settings.json
+
+.project
+.metadata
+
+*.iml
+/.idea
