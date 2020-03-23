@@ -10,10 +10,6 @@ items:
   spec:
     targetNamespaces:
     - event-streaming-messaging-broker
-kind: List
-metadata:
-  resourceVersion: ""
-  selfLink: ""
 
 ---
 apiVersion: operators.coreos.com/v1alpha1
