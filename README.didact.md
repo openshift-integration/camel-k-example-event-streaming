@@ -359,7 +359,7 @@ If you have Python installed you can execute the following:
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=webServer$$cd%20front-end%2Fsrc%2Fmain%2Fresources%2Fsite%20%3B%20python%20-m%20SimpleHTTPServer%208000&completion=Launched%20the%20webserver. "Launches the webserver"){.didact})
 
 
-Then access the [front-end](http://localhost:8080).
+Then access the [front-end](http://localhost:8000).
 
 
 [Click here to stop the server](didact://?commandId=vscode.didact.sendNamedTerminalCtrlC&text=webServer "Send `Ctrl+C` to the terminal window."){.didact}
