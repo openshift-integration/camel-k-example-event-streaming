@@ -5,10 +5,8 @@ items:
   metadata:
     annotations:
       olm.providedAPIs: ActiveMQArtemis.v2alpha1.broker.amq.io,ActiveMQArtemisAddress.v2alpha1.broker.amq.io,ActiveMQArtemisScaledown.v2alpha1.broker.amq.io
-    generation: 1
     name: event-streaming-messaging-broker-sub
     namespace: event-streaming-messaging-broker
-    resourceVersion: "164848623"
   spec:
     targetNamespaces:
     - event-streaming-messaging-broker
@@ -21,10 +19,8 @@ metadata:
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  generation: 1
   name: amq-broker
   namespace: event-streaming-messaging-broker
-  resourceVersion: '164848592'
 spec:
   channel: alpha
   installPlanApproval: Automatic
