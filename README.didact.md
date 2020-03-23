@@ -243,9 +243,10 @@ With all this configuration done, we have completed the initial steps to get the
 
 Now we will deploy the first component of the demo: [./openaq-consumer/src/main/java/OpenAQConsumer.java](didact://?commandId=vscode.open&projectFilePath=./openaq-consumer/src/main/java/OpenAQConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact}
 
-```kamel run openaq-consumer/src/main/java/OpenAQConsumer.java --dependency=camel-bean --dependency=camel-jackson --configmap example-event-streaming```
+```kamel run openaq-consumer/src/main/java/OpenAQConsumer.java --dependency=camel-bean --dependency=camel-jackson --property-file config/application.properties```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20openaq-consumer%2Fsrc%2Fmain%2Fjava%2FOpenAQConsumer.java%20--dependency=camel-bean%20--dependency=camel-jackson%20--configmap%20example-event-streaming&completion=Run%20the%20OpenAQ%20Consumer. "Run the OpenAQ Consumer"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20openaq-consumer%2Fsrc%2Fmain%2Fjava%2FOpenAQConsumer.java%20--dependency=camel-bean%20--dependency=camel-jackson%20--property-file%20config%2Fapplication.properties&completion=Started%20the%20OpenAQ%20Consumer. "Creates and starts the OpenAQ Consumer"){.didact})
+
 
 **Details**: this starts an integration that consumes data from the [OpenAQ](https://docs.openaq.org/) API, splits each record and sends them to
 our AMQ Stream instance. The demo addresses for the AMQ Streams broker is stored in the `example-event-streaming` which is inject into the demo
@@ -256,9 +257,10 @@ code and used to reach the instance.
 
 The second component on our demo is a [consumer](didact://?commandId=vscode.open&projectFilePath=./usgs-consumer/src/main/java/EarthquakeConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact} for events from the [USGS Earthquake Alert System](https://earthquake.usgs.gov/fdsnws/event/1/).
 
-```kamel run usgs-consumer/src/main/java/EarthquakeConsumer.java --dependency=camel-bean --dependency=camel-jackson --configmap example-event-streaming```
+```kamel run usgs-consumer/src/main/java/EarthquakeConsumer.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20usgs-consumer%2Fsrc%2Fmain%2Fjava%2FEarthquakeConsumer.java%20--configmap%20example-event-streaming%20--dependency=camel-jackson%20%20--dependency=camel-bean&completion=Run%20the%20USGS%20Earthquake%20Alert%20System%20Consumer. "Run the USGS Earthquake Alert System Consumer"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20usgs-consumer%2Fsrc%2Fmain%2Fjava%2FEarthquakeConsumer.java&completion=Started%20the%20USGS%20Earhquake%20Alert%20Consumer. "Creates and starts the USGS Earthquake Alert Consumer"){.didact})
+
 
 **Details**: this works in a similar way to the OpenAQ consumer.
 
@@ -270,14 +272,14 @@ them on the OpenShift cluster. To do so we can execute the following command:
 
 ```oc apply -f infra/knative/channels/audit-channel.yaml```
 
-([[^ execute]](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fknative%2Fchannels%2Faudit-channel.yaml&completion=Create%20Knative%20eventing%20channel. "Create knative eventing channel"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fknative%2Fchannels%2Faudit-channel.yaml&completion=Create%20Knative%20eventing%20channel. "Create knative eventing channel"){.didact})
 
 
 The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./audit-gatekeeper/src/main/java/GateKeeper.java&newWindow=false&completion=Ok. "View the source code"){.didact} simulates a service that is used to audit accesses to the system. It leverages knative support from Camel-K.
 
-```kamel run audit-gatekeeper/src/main/java/GateKeeper.java --dependency=camel-direct```
+```kamel run audit-gatekeeper/src/main/java/GateKeeper.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20audit-gatekeeper%2Fsrc%2Fmain%2Fjava%2FGateKeeper.java%20--dependency=camel-direct&completion=Run%20the%20GateKeeper%20audit. "Run the GateKeeper audit"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20audit-gatekeeper%2Fsrc%2Fmain%2Fjava%2FGateKeeper.java&completion=Run%20the%20GateKeeper%20audit. "Run the GateKeeper audit"){.didact})
 
 **Details**: this works in a similar way to the OpenAQ consumer.
 
@@ -285,9 +287,9 @@ The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./audit
 
 The User Report System simulates a service that is used to receive user-generated reports on the the system. It receives events sent by the user and sends them to the AMQ Streams instance. To run this component execute the following command:
 
-```kamel run --secret=example-event-streaming-user-reporting --dependency=camel-direct --dependency=camel-jackson --dependency=camel-rest --dependency=camel-netty-http  user-report-system/src/main/java/service/UserReportSystem.java```
+```kamel run user-report-system/src/main/java/service/UserReportSystem.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20--secret=example-event-streaming-user-reporting%20--dependency=camel-direct%20--dependency=camel-jackson%20--dependency=camel-rest%20--dependency=camel-netty-http%20%20user-report-system%2Fsrc%2Fmain%2Fjava%2Fservice%2FUserReportSystem.java&completion=Run%20the%20User%20Report%20System. "Run the User Report System"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20user-report-system%2Fsrc%2Fmain%2Fjava%2Fservice%2FUserReportSystem.java&completion=Run%20the%20User%20Report%20System. "Run the User Report System"){.didact})
 
 
 ### Running the Service Bridges
@@ -298,36 +300,36 @@ The service bridges consume the event data and prepare them for consumption.
 
 This service consumes the pollution events and sends it to the timeline topic for consumption.
 
-```kamel run event-bridge/src/main/java/PollutionBridge.java --configmap example-event-streaming --dependency=camel-sjms2 --dependency=camel-jackson --dependency mvn:org.apache.activemq:artemis-jms-client:2.10.1```
+```kamel run event-bridge/src/main/java/PollutionBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FPollutionBridge.java%20--configmap%20example-event-streaming%20--dependency=camel-sjms2%20--dependency=camel-jackson%20--dependency%20mvn:org.apache.activemq:artemis-jms-client:2.10.1&completion=Run%20the%20Pollution%20bridge. "Run the Pollution bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FPollutionBridge.java&completion=Run%20the%20Pollution%20bridge. "Run the Pollution bridge"){.didact})
 
 
 #### Running the Earthquake Bridge
 
-```kamel run event-bridge/src/main/java/EarthquakeBridge.java --configmap example-event-streaming --dependency=camel-sjms2 --dependency=camel-jackson --dependency mvn:org.apache.activemq:artemis-jms-client:2.10.1```
+```kamel run event-bridge/src/main/java/EarthquakeBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FEarthquakeBridge.java%20--configmap%20example-event-streaming%20--dependency=camel-sjms2%20--dependency=camel-jackson%20--dependency%20mvn:org.apache.activemq:artemis-jms-client:2.10.1&completion=Run%20the%20Earthquake%20Bridge. "Run the Earthquake Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FEarthquakeBridge.java&completion=Run%20the%20Earthquake%20Bridge. "Run the Earthquake Bridge"){.didact})
 
 
 #### Running the Health Alert Bridge
 
-```kamel run event-bridge/src/main/java/HealthBridge.java --configmap example-event-streaming --dependency=camel-sjms2 --dependency=camel-jackson --dependency mvn:org.apache.activemq:artemis-jms-client:2.10.1```
+```kamel run event-bridge/src/main/java/HealthBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FHealthBridge.java%20--configmap%20example-event-streaming%20--dependency=camel-sjms2%20--dependency=camel-jackson%20--dependency%20mvn:org.apache.activemq:artemis-jms-client:2.10.1&completion=Run%20the%20HealthBridge. "Run the HealthBridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FHealthBridge.java&completion=Run%20the%20HealthBridge. "Run the HealthBridge"){.didact})
 
 
 #### Running the Crime Bridge
 
-```kamel run event-bridge/src/main/java/CrimeBridge.java --configmap example-event-streaming --dependency=camel-sjms2 --dependency=camel-jackson --dependency mvn:org.apache.activemq:artemis-jms-client:2.10.1```
+```kamel run event-bridge/src/main/java/CrimeBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FCrimeBridge.java%20--configmap%20example-event-streaming%20--dependency=camel-sjms2%20--dependency=camel-jackson%20--dependency%20mvn:org.apache.activemq:artemis-jms-client:2.10.1&completion=Run%20the%20CrimeBridge. "Run the CrimeBridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FCrimeBridge.java&completion=Run%20the%20CrimeBridge. "Run the CrimeBridge"){.didact})
 
 #### Running the Timeline Bridge
 
-```kamel run event-bridge/src/main/java/TimelineBridge.java --configmap example-event-streaming --dependency=camel-jackson --dependency=camel-direct --dependency=camel-rest --dependency=camel-netty-http```
+```kamel run event-bridge/src/main/java/TimelineBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FTimelineBridge.java%20--configmap%20example-event-streaming%20--dependency=camel-jackson%20--dependency=camel-direct%20--dependency=camel-rest%20--dependency=camel-netty-http&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FTimelineBridge.java&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
 
 
 #### Checking the State of the Integrations
