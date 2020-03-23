@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: example-event-streaming
-data:
-  application.properties: |
-    kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-brokers.event-streaming-kafka-cluster:9094
-    messaging.broker.url=tcp://broker-hdls-svc.event-streaming-messaging-broker:61616

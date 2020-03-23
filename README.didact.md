@@ -198,8 +198,14 @@ Before we start running the demo, there's one last operator we need to install: 
 
 ### Initial Configuration
 
-The demo uses some configuration files that are stored in the OpenShift cluster configmaps. The first step in the deployment is to open
-the files and edit them. The following 2 commands present information that will be required to configure the deployment:
+Most of the components of the demo use use the [./config/application.properties](didact://?commandId=vscode.open&projectFilePath=./config/application.properties&newWindow=false&completion=Ok. "Edit the secret configuration"){.didact} to read the configurations they need to run. This file already comes with
+expected defaults, so no action should be needed.
+
+#### Optional: Configuration Adjustments
+
+*Note*: you can skip this step if you don't want to adjust the configuration
+
+In case you need to adjust the configuration, the following 2 commands present information that will be required to configure the deployment:
 
 ```oc get services -n event-streaming-messaging-broker```
 
@@ -209,6 +215,8 @@ the files and edit them. The following 2 commands present information that will 
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20services%20-n%20event-streaming-kafka-cluster&completion=Get%20the%20AMQ%20Streams%20services. "Get the AMQ Streams services"){.didact})
 
+They provide the addresses of the services running on the cluster and can be used to fill in the values on the properties file.
+
 We start by opening [./config/demo-config.yaml](didact://?commandId=vscode.open&projectFilePath=./config/demo-config.yaml&newWindow=false&completion=Ok. "Edit the config map"){.didact} and editing the parameters. The section we need to edit is the data element, named ```application.properties```. The content needs to be adjusted to point to the correct addresses of the brokers. It should be similar to this:
 
 ```
@@ -216,13 +224,14 @@ kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-brokers.event-stream
 messaging.broker.url=tcp://broker-hdls-svc.event-streaming-messaging-broker:61616
 ```
 
-Save the file and apply the changes with:
+#### Optional: Adjustments to the Secret
 
-```oc apply -f config/demo-config.yaml```
+*Note*: you can skip this step if you don't want to adjust the secrets
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20config%2Fdemo-config.yaml&completion=Create%20the%20basic%20configuration. "Create the basic configuration"){.didact})
+One of the components simulates receiving data from users and, in order to do so, authenticate the users. Because we normally don't want the credentials to be easily
+accessible, it simulates checking the access control by reading a secret.
 
-Now let's create a secret. We can open the file [./config/application.properties](didact://?commandId=vscode.open&projectFilePath=./config/application.properties&newWindow=false&completion=Ok. "Edit the secret configuration"){.didact} and adjust the parameters `kafka.bootstrap.address` and the `messaging.broker.url` so that they are the same ones we setup previously. Then we need to encode the file to `base64` using the `openssl` command:
+To create the secret, we can open the file [./config/application.properties](didact://?commandId=vscode.open&projectFilePath=./config/application.properties&newWindow=false&completion=Ok. "Edit the secret configuration"){.didact} and adjust the parameters `kafka.bootstrap.address` and the `messaging.broker.url` so that they are the same ones we setup previously. Then we need to encode the file to `base64` using the `openssl` command:
 
 ```cat config/application.properties | openssl base64```
 
@@ -231,13 +240,15 @@ Now let's create a secret. We can open the file [./config/application.properties
 
 We have to copy the encoded output and add it to the data section. It is *very* import to retain the indentation of the file, otherwise applications won't be able to read it. We can open the file [./config/demo-config-with-secret.yaml](didact://?commandId=vscode.open&projectFilePath=./config/demo-config-with-secret.yaml&newWindow=false&completion=Ok. "Edit the secret file"){.didact}, paste the base64 encrypted configuration and save the file.
 
-Once the file has been adjusted, we can push it to the cluster using the following command:
+#### Creating the Secret
+
+We can push the secret to the cluster using the following command:
 
 ```oc apply -f config/demo-config-with-secret.yaml```
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20config%2Fdemo-config-with-secret.yaml&completion=Create%20the%20encrypted%20configuration. "Create the encrypted configuration"){.didact})
 
-With all this configuration done, we have completed the initial steps to get the demo running.
+With this configuration secret created on the cluster, we have completed the initial steps to get the demo running.
 
 ### Running the OpenAQ Consumer
 
