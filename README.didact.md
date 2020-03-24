@@ -335,38 +335,44 @@ so with the command:
 
 #### Running the Front-end
 
-This web front end queries the timeline bridge service and displays the events collected at the time. For it to work, it
-is necessary to edit the [API URL](didact://?commandId=vscode.open&projectFilePath=./front-end/src/main/resources/site/js/index.js&newWindow=false&completion=Ok. "Edit the API URL"){.didact} to point to the API endpoint.
+This web front end queries the timeline bridge service and displays the events collected at the time. We will use
+OpenShift build services to build a container with the front-end and run it on the cluster.
+
+The front-end image leverages the offical [Apache Httpd 2.4](https://access.redhat.com/containers/?tab=tech-details#/registry.access.redhat.com/rhscl/httpd-24-rhel7) image from Red Hat's container registry. To download this image, we have to create a secret that contains the username and password
+for the registry so that the image can be downloaded. To do so, execute the following command replacing `$myUserName` with your username
+and `$myPassword` with your password:
+
+```oc create secret docker-registry redhat-registry --docker-server=registry.redhat.io --docker-username=$myUserName --docker-password=$myPassword```
+
+With the secret created, we can import the image to the cluster internal registry:
+
+```oc import-image rhscl/httpd-24-rhel7 --from=registry.access.redhat.com/rhscl/httpd-24-rhel7 --confirm```
+
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20import-image%20rhscl%2Fhttpd-24-rhel7%20--from=registry.access.redhat.com%2Frhscl%2Fhttpd-24-rhel7%20--confirm&completion=Imported%20the%20image. "Imported httpd image"){.didact})
+
+Then we can proceed to creating the build configuration and starting the build within the OpenShift cluster. The
+following command replaces the URL for the timeline API on the Java Script code and launches an image build.
+
+
+```URL=$(oc get ksvc timeline-bridge -o 'jsonpath={.status.url}') | cat ./front-end/Dockerfile|  oc new-build --docker-image="registry.redhat.io/rhscl/httpd-24-rhel7:latest" --build-arg="URL=$URL" -D -```
+
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$URL=http:%2F%2Ftimeline-bridge.camel-k-event-streaming.apps.camel-k.rhmw-integrations.net%20%7C%20cat%20.%2Ffront-end%2FDockerfile%7C%20%20oc%20new-build%20--docker-image=registry.redhat.io%2Frhscl%2Fhttpd-24-rhel7:latest%20--build-arg=URL=%20-D%20-&completion=Created%20the%20build%20configuration. "Creates the build configuration"){.didact})
+
+With the build complete, we can go ahead and create a deployment for the front-end:
+
+```oc apply -f front-end/front-end.yaml```
+
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20front-end%2Ffront-end.yaml&completion=Deployed%20the%20front-end. "Deploys the front-end"){.didact})
+
+The last thing missing is finding the URL for the front-end so that we can open it on the browser.
 
 To find the public API for the service, we can run the following command:
 
-```oc get ksvc timeline-bridge -o 'jsonpath={.status.url}'```
+```oc get routes front-end-external -o 'jsonpath={.spec.port.targetPort}://{.spec.host}'```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20ksvc%20timeline-bridge%20-o%20%27jsonpath=%7B.status.url%7D%27&completion=Get%20timeline%20public%20URL. "Get timeline public URL"){.didact}).
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20routes%20front-end-external%20-o%20%27jsonpath=%7B.spec.port.targetPort%7D:%2F%2F%7B.spec.host%7D%27&completion=Found%20the%20front-end%20URL. "Gets the front-end URL"){.didact})
 
-We can now [edit](didact://?commandId=vscode.open&projectFilePath=./front-end/src/main/resources/site/js/index.js&newWindow=false&completion=Ok. "Edit the API URL"){.didact} the file and change the following line to use the URL returned from the previous command:
-
-```
-var url = "http://timeline-bridge.camel-k-event-streaming-dev.my.host.net" + path;```
-```
-
-After that, save the file and continue.
-
-If you have Python installed you can execute the following:
-
-```cd front-end/src/main/resources/site ; python -m SimpleHTTPServer 8000```
-
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=webServer$$cd%20front-end%2Fsrc%2Fmain%2Fresources%2Fsite%20%3B%20python%20-m%20SimpleHTTPServer%208000&completion=Launched%20the%20webserver. "Launches the webserver"){.didact})
-
-
-Then access the [front-end](http://localhost:8000).
-
-
-[Click here to stop the server](didact://?commandId=vscode.didact.sendNamedTerminalCtrlC&text=webServer "Send `Ctrl+C` to the terminal window."){.didact}
-
-
-If you don't have Python installed, you can just open the file in a brower.
-
+Open this URL on the browser and we can now access the front-end.
 
 To cleanup everything, execute the following command:
 

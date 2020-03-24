@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-end-external
+  labels:
+    app: camel-k-example-event-streaming
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8080
+      nodePort: 30080
+  selector:
+    app: camel-k-example-event-streaming
+    component: front-end
+
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: front-end-external
+  labels:
+    app: camel-k-example-event-streaming
+spec:
+  to:
+    kind: Service
+    name: front-end-external
+  port:
+    targetPort: http
+  wildcardPolicy: None
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-end-deployment
+  labels:
+    app: camel-k-example-event-streaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: camel-k-example-event-streaming
+      component: front-end
+  template:
+    metadata:
+        labels:
+          app: camel-k-example-event-streaming
+          component: front-end
+    spec:
+      containers:
+        - name: front-end
+          image: image-registry.openshift-image-registry.svc:5000/camel-k-event-streaming/front-end:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 3
+          ports:
+            - name: http
+              containerPort: 8080
