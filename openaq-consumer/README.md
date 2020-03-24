@@ -1,2 +1,0 @@
-# OpenAQ Consumer
-
