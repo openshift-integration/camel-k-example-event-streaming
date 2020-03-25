@@ -210,7 +210,7 @@ In case you need to adjust the configuration, the following 2 commands present i
 
 They provide the addresses of the services running on the cluster and can be used to fill in the values on the properties file.
 
-We start by opening [./config/demo-config.yaml](didact://?commandId=vscode.open&projectFilePath=./config/demo-config.yaml&newWindow=false&completion=Ok. "Edit the config map"){.didact} and editing the parameters. The section we need to edit is the data element, named ```application.properties```. The content needs to be adjusted to point to the correct addresses of the brokers. It should be similar to this:
+We start by opening the file [./config/application.properties](didact://?commandId=vscode.open&projectFilePath=./config/application.properties&newWindow=false&completion=Ok. "Edit the config map"){.didact} and editing the parameters. The content needs to be adjusted to point to the correct addresses of the brokers. It should be similar to this:
 
 ```
 kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-brokers.event-streaming-kafka-cluster:9094
