@@ -276,11 +276,12 @@ The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./audit
 
 ### Running the User Report System
 
-The User Report System simulates a service that is used to receive user-generated reports on the the system. It receives events sent by the user and sends them to the AMQ Streams instance. To run this component execute the following command:
 
-```kamel run user-report-system/src/main/java/service/UserReportSystem.java```
+The [User Report System](didact://?commandId=vscode.open&projectFilePath=./user-report-system/UserReportSystem.java&newWindow=false&completion=Ok. "View the source code"){.didact}  simulates a service that is used to receive user-generated reports on the the system. It receives events sent by the user and sends them to the AMQ Streams instance. To run this component execute the following command:
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20user-report-system%2Fsrc%2Fmain%2Fjava%2Fservice%2FUserReportSystem.java&completion=Run%20the%20User%20Report%20System. "Run the User Report System"){.didact})
+```kamel run user-report-system/UserReportSystem.java```
+
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20user-report-system%2FUserReportSystem.java&completion=Run%20the%20User%20Report%20System. "Run the User Report System"){.didact})
 
 
 ### Running the Service Bridges
