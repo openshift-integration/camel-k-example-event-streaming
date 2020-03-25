@@ -385,7 +385,6 @@ public class EarthquakeConsumer extends RouteBuilder {
                 .log("USGS Earthquake route running")
                 .setHeader(Exchange.HTTP_METHOD).constant("GET")
                 .to("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson")
-                .streamCaching()
                 .unmarshal(jacksonDataFormat)
                 /*
                 In this example we are only interested on the measurement data ... and we want to sent each
