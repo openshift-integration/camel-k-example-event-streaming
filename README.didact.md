@@ -266,11 +266,11 @@ them on the OpenShift cluster. To do so we can execute the following command:
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fknative%2Fchannels%2Faudit-channel.yaml&completion=Create%20Knative%20eventing%20channel. "Create knative eventing channel"){.didact})
 
 
-The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./audit-gatekeeper/src/main/java/GateKeeper.java&newWindow=false&completion=Ok. "View the source code"){.didact} simulates a service that is used to audit accesses to the system. It leverages knative support from Camel-K.
+The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./audit-gatekeeper/GateKeeper.java&newWindow=false&completion=Ok. "View the source code"){.didact} simulates a service that is used to audit accesses to the system. It leverages knative support from Camel-K.
 
-```kamel run audit-gatekeeper/src/main/java/GateKeeper.java```
+```kamel run audit-gatekeeper/GateKeeper.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20audit-gatekeeper%2Fsrc%2Fmain%2Fjava%2FGateKeeper.java&completion=Run%20the%20GateKeeper%20audit. "Run the GateKeeper audit"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20audit-gatekeeper%2FGateKeeper.java&completion=Run%20the%20GateKeeper%20audit. "Run the GateKeeper audit"){.didact})
 
 **Details**: this works in a similar way to the OpenAQ consumer.
 
