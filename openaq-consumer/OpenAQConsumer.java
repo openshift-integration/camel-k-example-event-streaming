@@ -188,11 +188,9 @@ public class OpenAQConsumer extends RouteBuilder {
          route, setting up the HTTP method to GET and hitting the OpenAQ measurement API.
          */
         from("timer:refresh?period=600000&fixedRate=true")
-
                 .log("OpenAQ route running")
                 .setHeader(Exchange.HTTP_METHOD).constant("GET")
                 .to("https://api.openaq.org/v1/measurements?limit=10000")
-                .streamCaching()
                 .unmarshal(jacksonDataFormat)
 
                 /*
