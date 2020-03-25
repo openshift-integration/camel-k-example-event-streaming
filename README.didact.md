@@ -246,11 +246,11 @@ code and used to reach the instance.
 
 ### Running the USGS Earthquake Alert System Consumer
 
-The second component on our demo is a [consumer](didact://?commandId=vscode.open&projectFilePath=./usgs-consumer/src/main/java/EarthquakeConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact} for events from the [USGS Earthquake Alert System](https://earthquake.usgs.gov/fdsnws/event/1/).
+The second component on our demo is a [consumer](didact://?commandId=vscode.open&projectFilePath=./usgs-consumer/EarthquakeConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact} for events from the [USGS Earthquake Alert System](https://earthquake.usgs.gov/fdsnws/event/1/).
 
-```kamel run usgs-consumer/src/main/java/EarthquakeConsumer.java```
+```kamel run usgs-consumer/EarthquakeConsumer.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20usgs-consumer%2Fsrc%2Fmain%2Fjava%2FEarthquakeConsumer.java&completion=Started%20the%20USGS%20Earhquake%20Alert%20Consumer. "Creates and starts the USGS Earthquake Alert Consumer"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20usgs-consumer%2FEarthquakeConsumer.java&completion=Started%20the%20USGS%20Earhquake%20Alert%20Consumer. "Creates and starts the USGS Earthquake Alert Consumer"){.didact})
 
 
 **Details**: this works in a similar way to the OpenAQ consumer.
