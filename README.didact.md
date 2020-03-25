@@ -232,11 +232,11 @@ With this configuration secret created on the cluster, we have completed the ini
 
 ### Running the OpenAQ Consumer
 
-Now we will deploy the first component of the demo: [./openaq-consumer/src/main/java/OpenAQConsumer.java](didact://?commandId=vscode.open&projectFilePath=./openaq-consumer/src/main/java/OpenAQConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact}
+Now we will deploy the first component of the demo: [./openaq-consumer/OpenAQConsumer.java](didact://?commandId=vscode.open&projectFilePath=./openaq-consumer/OpenAQConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact}
 
-```kamel run openaq-consumer/src/main/java/OpenAQConsumer.java --dependency=camel-bean --dependency=camel-jackson --property-file config/application.properties```
+```kamel run openaq-consumer/OpenAQConsumer.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20openaq-consumer%2Fsrc%2Fmain%2Fjava%2FOpenAQConsumer.java%20--dependency=camel-bean%20--dependency=camel-jackson%20--property-file%20config%2Fapplication.properties&completion=Started%20the%20OpenAQ%20Consumer. "Creates and starts the OpenAQ Consumer"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20openaq-consumer%2FOpenAQConsumer.java%20--dependency=camel-bean%20--dependency=camel-jackson%20--property-file%20config%2Fapplication.properties&completion=Started%20the%20OpenAQ%20Consumer. "Creates and starts the OpenAQ Consumer"){.didact})
 
 
 **Details**: this starts an integration that consumes data from the [OpenAQ](https://docs.openaq.org/) API, splits each record and sends them to
