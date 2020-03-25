@@ -14,7 +14,6 @@ public class GateKeeper extends RouteBuilder {
          * to use features like scale-to-zero from Knative.
          */
         from("knative:channel/audit")
-                .streamCaching()
                 .convertBodyTo(String.class)
                 .wireTap("direct:log");
 
