@@ -357,7 +357,8 @@ following command replaces the URL for the timeline API on the Java Script code 
 
 ```URL=$(oc get ksvc timeline-bridge -o 'jsonpath={.status.url}') | cat ./front-end/Dockerfile|  oc new-build --docker-image="registry.redhat.io/rhscl/httpd-24-rhel7:latest" --to=front-end --build-arg="URL=$URL" -D -```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$URL=http:%2F%2Ftimeline-bridge.camel-k-event-streaming.apps.camel-k.rhmw-integrations.net%20%7C%20cat%20.%2Ffront-end%2FDockerfile%7C%20%20oc%20new-build%20--docker-image=registry.redhat.io%2Frhscl%2Fhttpd-24-rhel7:latest%20--to=front-end%20--build-arg=URL=%20-D%20-&completion=Created%20the%20build%20configuration. "Creates the build configuration"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$URL=$%28oc%20get%20ksvc%20timeline-bridge%20-o%20%27jsonpath=%7B.status.url%7D%27%29%20%7C%20cat%20.%2Ffront-end%2FDockerfile%7C%20oc%20new-build%20--docker-image=registry.redhat.io%2Frhscl%2Fhttpd-24-rhel7:latest%20--to=front-end%20--build-arg=URL=%20-D%20-&completion=Created%20the%20build%20configuration. "Creates the build configuration"){.didact})
+
 
 With the build complete, we can go ahead and create a deployment for the front-end:
 
