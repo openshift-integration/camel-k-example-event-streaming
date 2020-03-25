@@ -292,36 +292,36 @@ The service bridges consume the event data and prepare them for consumption.
 
 This service consumes the pollution events and sends it to the timeline topic for consumption.
 
-```kamel run event-bridge/src/main/java/PollutionBridge.java```
+```kamel run event-bridge/PollutionBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FPollutionBridge.java&completion=Run%20the%20Pollution%20bridge. "Run the Pollution bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FPollutionBridge.java&completion=Run%20the%20Pollution%20bridge. "Run the Pollution bridge"){.didact})
 
 
 #### Running the Earthquake Bridge
 
-```kamel run event-bridge/src/main/java/EarthquakeBridge.java```
+```kamel run event-bridge/EarthquakeBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FEarthquakeBridge.java&completion=Run%20the%20Earthquake%20Bridge. "Run the Earthquake Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FEarthquakeBridge.java&completion=Run%20the%20Earthquake%20Bridge. "Run the Earthquake Bridge"){.didact})
 
 
 #### Running the Health Alert Bridge
 
-```kamel run event-bridge/src/main/java/HealthBridge.java```
+```kamel run event-bridge/HealthBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FHealthBridge.java&completion=Run%20the%20HealthBridge. "Run the HealthBridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FHealthBridge.java&completion=Run%20the%20HealthBridge. "Run the HealthBridge"){.didact})
 
 
 #### Running the Crime Bridge
 
-```kamel run event-bridge/src/main/java/CrimeBridge.java```
+```kamel run event-bridge/CrimeBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FCrimeBridge.java&completion=Run%20the%20CrimeBridge. "Run the CrimeBridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FCrimeBridge.java&completion=Run%20the%20CrimeBridge. "Run the CrimeBridge"){.didact})
 
 #### Running the Timeline Bridge
 
-```kamel run event-bridge/src/main/java/TimelineBridge.java```
+```kamel run event-bridge/TimelineBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2Fsrc%2Fmain%2Fjava%2FTimelineBridge.java&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FTimelineBridge.java&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
 
 
 #### Checking the State of the Integrations
