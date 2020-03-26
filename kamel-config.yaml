@@ -3,10 +3,10 @@ kamel:
     integration:
       crime-bridge:
         property-files: '[config/application.properties]'
-        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.10.1]'
+        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005]'
       earthquake-bridge:
         property-files: '[config/application.properties]'
-        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.10.1]'
+        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005]'
       earthquake-consumer:
         dependencies: '[camel-bean,camel-jackson]'
         property-files: '[config/application.properties]'
@@ -14,13 +14,13 @@ kamel:
         dependencies: '[camel-direct]'
       health-bridge:
         property-files: '[config/application.properties]'
-        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.10.1]'
+        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005]'
       open-aq-consumer:
         dependencies: '[camel-bean,camel-jackson]'
         property-files: '[config/application.properties]'
       pollution-bridge:
         property-files: '[config/application.properties]'
-        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.10.1]'
+        dependencies: '[camel-sjms2,camel-jackson,mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005]'
       timeline-bridge:
         property-files: '[config/application.properties]'
         dependencies: '[camel-jackson,camel-direct,camel-rest,camel-netty-http]'
