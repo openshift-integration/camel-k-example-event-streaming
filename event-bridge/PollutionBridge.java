@@ -3,7 +3,7 @@
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.apache.qpid.jms.JmsConnectionFactory;
 import org.apache.camel.PropertyInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.sjms2.Sjms2Component;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class PollutionBridge extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(PollutionBridge.class);
 
-    @PropertyInject("messaging.broker.url")
+    @PropertyInject("messaging.broker.url.amqp")
     private String messagingBrokerUrl;
 
     public static class PollutionData {
@@ -164,7 +164,8 @@ public class PollutionBridge extends RouteBuilder {
         final String LONG_TERM = "long term";
 
         Sjms2Component sjms2Component = new Sjms2Component();
-        sjms2Component.setConnectionFactory(new ActiveMQConnectionFactory(messagingBrokerUrl));
+        // Note that this component is using AMQP instead of Core protocol like the others
+        sjms2Component.setConnectionFactory(new JmsConnectionFactory(messagingBrokerUrl));
         getContext().addComponent("sjms2", sjms2Component);
 
 

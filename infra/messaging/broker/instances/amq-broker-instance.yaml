@@ -6,3 +6,12 @@ spec:
   deploymentPlan:
     size: 1
     image: 'registry.redhat.io/amq7/amq-broker:7.5'
+  acceptors:
+  - name: artemis_acceptor
+    protocols: artemis,core,openwire
+    port: 61616
+    sslEnabled: false
+  - name: amqp_acceptor
+    protocols: amqp
+    port: 5672
+    sslEnabled: false
