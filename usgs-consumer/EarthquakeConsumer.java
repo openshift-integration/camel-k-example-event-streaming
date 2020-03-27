@@ -381,7 +381,7 @@ public class EarthquakeConsumer extends RouteBuilder {
          Read the data at a fixed interval of 1 second between each request, logging the execution of the
          route, setting up the HTTP method to GET and hitting the OpenAQ measurement API.
          */
-        from("timer:refresh?period=60000&fixedRate=true")
+        from("timer:refresh?period={{consumers.fetch.period}}&fixedRate=true")
                 .log("USGS Earthquake route running")
                 .setHeader(Exchange.HTTP_METHOD).constant("GET")
                 .to("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson")
