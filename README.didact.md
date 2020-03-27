@@ -234,9 +234,9 @@ With this configuration secret created on the cluster, we have completed the ini
 
 Now we will deploy the first component of the demo: [./openaq-consumer/OpenAQConsumer.java](didact://?commandId=vscode.open&projectFilePath=./openaq-consumer/OpenAQConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact}
 
-```kamel run openaq-consumer/OpenAQConsumer.java```
+```kamel run openaq-consumer/OpenAQConsumer.java model/pollution/* --name open-aq-consumer```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20openaq-consumer%2FOpenAQConsumer.java%20--dependency=camel-bean%20--dependency=camel-jackson%20--property-file%20config%2Fapplication.properties&completion=Started%20the%20OpenAQ%20Consumer. "Creates and starts the OpenAQ Consumer"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20openaq-consumer%2FOpenAQConsumer.java%20model%2Fpollution%2F*%20--name%20open-aq-consumer&completion=Started%20the%20OpenAQ%20Consumer. "Creates and starts the OpenAQ Consumer"){.didact})
 
 
 **Details**: this starts an integration that consumes data from the [OpenAQ](https://docs.openaq.org/) API, splits each record and sends them to
@@ -248,9 +248,9 @@ code and used to reach the instance.
 
 The second component on our demo is a [consumer](didact://?commandId=vscode.open&projectFilePath=./usgs-consumer/EarthquakeConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact} for events from the [USGS Earthquake Alert System](https://earthquake.usgs.gov/fdsnws/event/1/).
 
-```kamel run usgs-consumer/EarthquakeConsumer.java```
+```kamel run usgs-consumer/EarthquakeConsumer.java model/earthquake/* --name earthquake-consumer```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20usgs-consumer%2FEarthquakeConsumer.java&completion=Started%20the%20USGS%20Earhquake%20Alert%20Consumer. "Creates and starts the USGS Earthquake Alert Consumer"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20usgs-consumer%2FEarthquakeConsumer.java%20model%2Fearthquake%2F*%20--name%20earthquake-consumer&completion=Started%20the%20USGS%20Earhquake%20Alert%20Consumer. "Creates and starts the USGS Earthquake Alert Consumer"){.didact})
 
 
 **Details**: this works in a similar way to the OpenAQ consumer.
@@ -279,9 +279,9 @@ The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./audit
 
 The [User Report System](didact://?commandId=vscode.open&projectFilePath=./user-report-system/UserReportSystem.java&newWindow=false&completion=Ok. "View the source code"){.didact}  simulates a service that is used to receive user-generated reports on the the system. It receives events sent by the user and sends them to the AMQ Streams instance. To run this component execute the following command:
 
-```kamel run user-report-system/UserReportSystem.java```
+```kamel run user-report-system/UserReportSystem.java model/common/Data.java --name user-report-system```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20user-report-system%2FUserReportSystem.java&completion=Run%20the%20User%20Report%20System. "Run the User Report System"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20user-report-system%2FUserReportSystem.java%20model%2Fcommon%2FData.java%20--name%20user-report-system&completion=Run%20the%20User%20Report%20System. "Run the User Report System"){.didact})
 
 
 ### Running the Service Bridges
@@ -292,30 +292,30 @@ The service bridges consume the event data and prepare them for consumption.
 
 This service consumes the pollution events and sends it to the timeline topic for consumption.
 
-```kamel run event-bridge/PollutionBridge.java```
+```kamel run event-bridge/PollutionBridge.java model/common/Alert.java model/pollution/PollutionData.java --name pollution-bridge```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FPollutionBridge.java&completion=Run%20the%20Pollution%20bridge. "Run the Pollution bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FPollutionBridge.java%20model%2Fcommon%2FAlert.java%20model%2Fpollution%2FPollutionData.java%20--name%20pollution-bridge&completion=Run%20the%20Pollution%20bridge. "Run the Pollution bridge"){.didact})
 
 
 #### Running the Earthquake Bridge
 
-```kamel run event-bridge/EarthquakeBridge.java```
+```kamel run event-bridge/EarthquakeBridge.java model/common/Alert.java model/earthquake/Feature.java --name earthquake-bridge```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FEarthquakeBridge.java&completion=Run%20the%20Earthquake%20Bridge. "Run the Earthquake Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FEarthquakeBridge.java%20model%2Fcommon%2FAlert.java%20model%2Fearthquake%2FFeature.java%20--name%20earthquake-bridge&completion=Run%20the%20Earthquake%20Bridge. "Run the Earthquake Bridge"){.didact})
 
 
 #### Running the Health Alert Bridge
 
-```kamel run event-bridge/HealthBridge.java```
+```kamel run event-bridge/HealthBridge.java model/common/* --name health-bridge```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FHealthBridge.java&completion=Run%20the%20HealthBridge. "Run the HealthBridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FHealthBridge.java%20model%2Fcommon%2F*%20--name%20health-bridge&completion=Run%20the%20HealthBridge. "Run the HealthBridge"){.didact})
 
 
 #### Running the Crime Bridge
 
-```kamel run event-bridge/CrimeBridge.java```
+```kamel run event-bridge/CrimeBridge.java model/common/* --name crime-bridge```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FCrimeBridge.java&completion=Run%20the%20CrimeBridge. "Run the CrimeBridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FCrimeBridge.java%20model%2Fcommon%2F*%20--name%20crime-bridge&completion=Run%20the%20CrimeBridge. "Run the CrimeBridge"){.didact})
 
 #### Running the Timeline Bridge
 
