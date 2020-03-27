@@ -160,6 +160,7 @@ public class PollutionBridge extends RouteBuilder {
     public void configure() throws Exception {
         final String unsafeHeader = "unsafe";
         final String unsafeTypeHeader = "unsafe-type";
+        final String cityHeader = "city";
         final String SHORT_TERM = "short term";
         final String LONG_TERM = "long term";
 
@@ -232,6 +233,7 @@ public class PollutionBridge extends RouteBuilder {
 
                     String body = mapper.writeValueAsString(alert);
                     exchange.getMessage().setBody(body);
+                    exchange.getMessage().setHeader(cityHeader, pollutionData.getCity());
                 })
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))

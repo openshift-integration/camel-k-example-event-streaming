@@ -207,6 +207,7 @@ public class OpenAQConsumer extends RouteBuilder {
                 .to("kafka:pm-data?brokers={{kafka.bootstrap.address}}");
 
         from("direct:tap")
+                .setBody(simple("Received message from OpenAQ: ${body}"))
                 .to("log:info");
     }
 }
