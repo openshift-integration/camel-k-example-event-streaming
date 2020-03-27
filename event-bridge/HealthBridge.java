@@ -134,17 +134,20 @@ public class HealthBridge extends RouteBuilder {
                 .process(exchange -> {
                     Data eventData = exchange.getMessage().getBody(Data.class);
 
+                    Alert alert = new Alert();
+
                     if (eventData.getReport().isAlert()) {
                         exchange.getMessage().setHeader(unsafeHeader, true);
+                        alert.setSeverity("red");
+                    } else {
+                        alert.setSeverity("yellow");
                     }
 
                     String text = String.format("There is a %s incident on %s", eventData.getReport().getMeasurement(),
                         eventData.getReport().getLocation());
 
-                    Alert alert = new Alert();
-
                     alert.setText(text);
-                    alert.setSeverity("yellow");
+                    
 
                     ObjectMapper mapper = new ObjectMapper();
                     String body = mapper.writeValueAsString(alert);
