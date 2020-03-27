@@ -120,6 +120,7 @@ public class HealthBridge extends RouteBuilder {
 
     public void configure() throws Exception {
         final String unsafeHeader = "unsafe";
+        final String locationHeader = "location";
 
         Sjms2Component sjms2Component = new Sjms2Component();
         sjms2Component.setConnectionFactory(new ActiveMQConnectionFactory(messagingBrokerUrl));
@@ -149,6 +150,7 @@ public class HealthBridge extends RouteBuilder {
                     String body = mapper.writeValueAsString(alert);
 
                     exchange.getMessage().setBody(body);
+                    exchange.getMessage().setHeader(locationHeader, eventData.getReport().getLocation());
                 })
                 .streamCaching()
                 .wireTap("direct:timeline")
