@@ -1,4 +1,4 @@
-@require('org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005')
+@require('org.apache.activemq:artemis-jms-client:2.11.0')
 Feature: Pollution bridge test
 
   Background:

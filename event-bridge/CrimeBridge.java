@@ -119,6 +119,7 @@ public class CrimeBridge extends RouteBuilder {
 
     public void configure() throws Exception {
         final String unsafeHeader = "unsafe";
+        final String locationHeader = "location";
 
         Sjms2Component sjms2Component = new Sjms2Component();
         sjms2Component.setConnectionFactory(new ActiveMQConnectionFactory(messagingBrokerUrl));
@@ -152,14 +153,15 @@ public class CrimeBridge extends RouteBuilder {
                     String body = mapper.writeValueAsString(alert);
 
                     exchange.getMessage().setBody(body);
+                    exchange.getMessage().setHeader(locationHeader, eventData.getReport().getLocation());
                 })
                 .streamCaching()
                 .wireTap("direct:timeline")
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))
-                        .to("sjms2://queue:alarms&ttl={{messaging.ttl.alarms}}")
+                        .to("sjms2://queue:alarms?ttl={{messaging.ttl.alarms}}")
                     .otherwise()
-                        .to("sjms2://queue:notifications&ttl={{messaging.ttl.notifications}}");
+                        .to("sjms2://queue:notifications?ttl={{messaging.ttl.notifications}}");
 
         from("direct:timeline")
                 .log("${body}")

@@ -391,7 +391,7 @@ public class EarthquakeBridge extends RouteBuilder {
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))
                         .wireTap("direct:timeline")
-                        .to("sjms2://queue:alarms&ttl={{messaging.ttl.alarms}}", "sjms2://queue:notifications&ttl={{messaging.ttl.notifications}}");
+                        .to("sjms2://queue:alarms?ttl={{messaging.ttl.alarms}}", "sjms2://queue:notifications?ttl={{messaging.ttl.notifications}}");
 
         from("direct:timeline")
                 .log("${body}")
