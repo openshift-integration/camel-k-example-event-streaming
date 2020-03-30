@@ -9,6 +9,7 @@ import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.camel.model.dataformat.JsonLibrary;
 
 public class PollutionBridge extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(PollutionBridge.class);
@@ -28,13 +29,8 @@ public class PollutionBridge extends RouteBuilder {
         sjms2Component.setConnectionFactory(new JmsConnectionFactory(messagingBrokerUrl));
         getContext().addComponent("sjms2", sjms2Component);
 
-
-        JacksonDataFormat dataFormat  = new JacksonDataFormat();
-        dataFormat.setUnmarshalType(PollutionData.class);
-
         from("kafka:pm-data?brokers={{kafka.bootstrap.address}}")
-                .streamCaching()
-                .unmarshal(dataFormat)
+                .unmarshal().json(JsonLibrary.Jackson, PollutionData.class)
                 .process(exchange -> {
                     final String TEXT_FORMAT =
                             "City %s exceeds the maximum safe levels for %s exposure: %f.";
@@ -84,16 +80,13 @@ public class PollutionBridge extends RouteBuilder {
                                 pollutionData.getValue());
                     }
 
-
-
                     alert.setText(text);
 
-                    ObjectMapper mapper = new ObjectMapper();
-
-                    String body = mapper.writeValueAsString(alert);
-                    exchange.getMessage().setBody(body);
+                    exchange.getMessage().setBody(alert);
                     exchange.getMessage().setHeader(cityHeader, pollutionData.getCity());
                 })
+                .marshal().json()
+                .convertBodyTo(String.class)
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))
                         .wireTap("direct:timeline")

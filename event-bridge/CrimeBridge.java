@@ -9,6 +9,8 @@ import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.camel.model.dataformat.JsonLibrary;
+
 public class CrimeBridge extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(CrimeBridge.class);
 
@@ -23,11 +25,8 @@ public class CrimeBridge extends RouteBuilder {
         sjms2Component.setConnectionFactory(new ActiveMQConnectionFactory(messagingBrokerUrl));
         getContext().addComponent("sjms2", sjms2Component);
 
-        JacksonDataFormat dataFormat  = new JacksonDataFormat();
-        dataFormat.setUnmarshalType(Data.class);
-
         from("kafka:crime-data?brokers={{kafka.bootstrap.address}}")
-                .unmarshal(dataFormat)
+                .unmarshal().json(JsonLibrary.Jackson, Data.class)
                 .process(exchange -> {
                     Data eventData = exchange.getMessage().getBody(Data.class);
                     Alert alert = new Alert();
@@ -44,16 +43,13 @@ public class CrimeBridge extends RouteBuilder {
                     String text = String.format("There is a %s incident on %s", eventData.getReport().getMeasurement(),
                             eventData.getReport().getLocation());
 
-
                     alert.setText(text);
 
-                    ObjectMapper mapper = new ObjectMapper();
-                    String body = mapper.writeValueAsString(alert);
-
-                    exchange.getMessage().setBody(body);
+                    exchange.getMessage().setBody(alert);
                     exchange.getMessage().setHeader(locationHeader, eventData.getReport().getLocation());
                 })
-                .streamCaching()
+                .marshal().json()
+                .convertBodyTo(String.class)
                 .wireTap("direct:timeline")
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))

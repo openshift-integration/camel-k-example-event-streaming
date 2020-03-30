@@ -9,6 +9,8 @@ import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.camel.model.dataformat.JsonLibrary;
+
 
 public class EarthquakeBridge extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(EarthquakeBridge.class);
@@ -18,17 +20,14 @@ public class EarthquakeBridge extends RouteBuilder {
 
     public void configure() throws Exception {
         final String unsafeHeader = "unsafe";
+        final String titleHeader = "title";
 
         Sjms2Component sjms2Component = new Sjms2Component();
         sjms2Component.setConnectionFactory(new ActiveMQConnectionFactory(messagingBrokerUrl));
         getContext().addComponent("sjms2", sjms2Component);
 
-        JacksonDataFormat dataFormat  = new JacksonDataFormat();
-        dataFormat.setUnmarshalType(Feature.class);
-
-
         from("kafka:earthquake-data?brokers={{kafka.bootstrap.address}}")
-                .unmarshal(dataFormat)
+                .unmarshal().json(JsonLibrary.Jackson, Feature.class)
                 .process(exchange -> {
                     Feature feature = exchange.getMessage().getBody(Feature.class);
 
@@ -36,15 +35,11 @@ public class EarthquakeBridge extends RouteBuilder {
                     double magnitude = feature.getProperties().getMag();
                     int tsunami = feature.getProperties().getTsunami();
 
-
-
                     if (alert != null || magnitude > 4.0 || tsunami != 0) {
-                        Alert alertMessage = new Alert();
-                        alertMessage.setText("Critical geological event: " + feature.getProperties().getTitle());
-
                         exchange.getMessage().setHeader(unsafeHeader, true);
 
-                        String text = feature.getProperties().getTitle();
+                        Alert alertMessage = new Alert();
+                        String text = "Critical geological event: " + feature.getProperties().getTitle();
 
                         if (tsunami != 0) {
                             text = text + " with possibility of tsunami";
@@ -53,15 +48,15 @@ public class EarthquakeBridge extends RouteBuilder {
                         alertMessage.setSeverity("red");
                         alertMessage.setText(text);
 
-                        ObjectMapper mapper = new ObjectMapper();
-                        String body = mapper.writeValueAsString(alertMessage);
-                        exchange.getMessage().setBody(body);
+                        exchange.getMessage().setBody(alertMessage);
                     }
                     else {
                         LOG.debug("Non-critical geological event: {}", feature.getProperties().getTitle());
                     }
+                    exchange.getMessage().setHeader(titleHeader ,feature.getProperties().getTitle());
                 })
-                .streamCaching()
+                .marshal().json()
+                .convertBodyTo(String.class)
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))
                         .wireTap("direct:timeline")

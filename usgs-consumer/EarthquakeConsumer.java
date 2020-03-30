@@ -12,32 +12,19 @@ import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.camel.model.dataformat.JsonLibrary;
+
 public class EarthquakeConsumer extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(EarthquakeConsumer.class);
 
     public static class MySplitter {
-        public List<String> splitBody(Data data) {
-            List<String> ret = new ArrayList<>(data.getFeatures().size());
-
-            ObjectMapper mapper = new ObjectMapper();
-            for (Feature feature: data.getFeatures()) {
-
-                try {
-                    ret.add(mapper.writeValueAsString(feature));
-                } catch (JsonProcessingException e) {
-                    LOG.error("Unable to serialize record: {}", feature);
-                }
-            }
-
-            return ret;
+        public List<Feature> splitBody(Data data) {
+            return data.getFeatures();
         }
     }
 
     public void configure() throws Exception {
-        JacksonDataFormat jacksonDataFormat = new JacksonDataFormat();
-
-        jacksonDataFormat.setUnmarshalType(Data.class);
-/*
+        /*
          Read the data at a fixed interval of 1 second between each request, logging the execution of the
          route, setting up the HTTP method to GET and hitting the OpenAQ measurement API.
          */
@@ -45,7 +32,7 @@ public class EarthquakeConsumer extends RouteBuilder {
                 .log("USGS Earthquake route running")
                 .setHeader(Exchange.HTTP_METHOD).constant("GET")
                 .to("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson")
-                .unmarshal(jacksonDataFormat)
+                .unmarshal().json(JsonLibrary.Jackson, Data.class)
                 /*
                 In this example we are only interested on the measurement data ... and we want to sent each
                 measurement separately. To do, we use a splitter to split the results array and send to Kafka
@@ -56,7 +43,8 @@ public class EarthquakeConsumer extends RouteBuilder {
                 /*
                  Then setup a wireTap route to log the data before sending it to our Kafka instance.
                  */
-
+                .marshal().json()
+                .convertBodyTo(String.class)
                 .wireTap("direct:tap")
                 .to("kafka:earthquake-data?brokers={{kafka.bootstrap.address}}");
 
