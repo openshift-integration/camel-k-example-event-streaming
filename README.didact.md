@@ -20,10 +20,9 @@ From the VSCode UI, click on the `readme.didact.md` file and select "Didact: Sta
 
 The OpenShift CLI tool ("oc") will be used to interact with the OpenShift cluster.
 
-[Check if the OpenShift CLI ("oc") is installed](didact://?commandId=vscode.didact.requirementCheck&text=oc-client-install-check$$oc%20version$$Client%20Version&completion=Verified%20if%20OC%20is%20available. "Verifies if OpenShift client is installed"){.didact}
+[Check if the OpenShift CLI ("oc") is installed](didact://?commandId=vscode.didact.cliCommandSuccessful&text=oc-requirements-status$$oc%20help&completion=Checked%20oc%20tool%20availability "Tests to see if `oc help` returns a 0 return code"){.didact}
 
-*Status: unknown*{#oc-client-install-check}
-
+*Status: unknown*{#oc-requirements-status}
 
 **Connection to an OpenShift cluster**
 
