@@ -93,7 +93,7 @@ public class UserReportSystem extends RouteBuilder {
                                     exchange.getMessage().setHeader(VALID_HEADER, true);
                                     exchange.getMessage().setHeader(REPORT_TYPE_HEADER, report.getType());
 
-                                    String body = mapper.writeValueAsString(report);
+                                    String body = mapper.writeValueAsString(data);
                                     exchange.getMessage().setBody(body);
                                     break;
                                 }
