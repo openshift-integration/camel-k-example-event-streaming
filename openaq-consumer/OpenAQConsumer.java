@@ -1,5 +1,7 @@
 // camel-k: language=java
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,36 +13,21 @@ import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.camel.model.dataformat.JsonLibrary;
+
 public class OpenAQConsumer extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(OpenAQConsumer.class);
 
     public static class MySplitter {
-        public List<String> splitBody(OpenAQData data) {
-            List<String> ret = new ArrayList<>(data.getResults().size());
-
-            ObjectMapper mapper = new ObjectMapper();
-            for (PollutionData pollutionData : data.getResults()) {
-                if (pollutionData.getParameter().equals("pm25") || pollutionData.getParameter().equals("pm10")) {
-                    try {
-                        ret.add(mapper.writeValueAsString(pollutionData));
-                    } catch (JsonProcessingException e) {
-                        LOG.error("Unable to serialize record: {}", pollutionData);
-                    }
-                }
-
-            }
-
-            return ret;
+        public List<PollutionData> splitBody(OpenAQData data) {
+            return data.getResults().stream()
+            .filter(d -> d.getParameter().equals("pm25") || d.getParameter().equals("pm10"))
+            .collect(toList());
         }
     }
 
     public void configure() throws Exception {
-        JacksonDataFormat jacksonDataFormat = new JacksonDataFormat();
-
-        jacksonDataFormat.setUnmarshalType(OpenAQData.class);
-
-
-        /*
+         /*
          Read the data at a fixed interval of 1 second between each request, logging the execution of the
          route, setting up the HTTP method to GET and hitting the OpenAQ measurement API.
          */
@@ -48,7 +35,7 @@ public class OpenAQConsumer extends RouteBuilder {
                 .log("OpenAQ route running")
                 .setHeader(Exchange.HTTP_METHOD).constant("GET")
                 .to("https://api.openaq.org/v1/measurements?limit={{consumers.fetch.limit}}")
-                .unmarshal(jacksonDataFormat)
+                .unmarshal().json(JsonLibrary.Jackson, OpenAQData.class)
 
                 /*
                 In this example we are only interested on the measurement data ... and we want to sent each
@@ -59,7 +46,8 @@ public class OpenAQConsumer extends RouteBuilder {
                 /*
                  Then setup a wireTap route to log the data before sending it to our Kafka instance.
                  */
-
+                .marshal().json()
+                .convertBodyTo(String.class)
                 .wireTap("direct:tap")
                 .to("kafka:pm-data?brokers={{kafka.bootstrap.address}}");
 
