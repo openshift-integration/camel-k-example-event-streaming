@@ -61,6 +61,7 @@ public class EarthquakeConsumer extends RouteBuilder {
                 .to("kafka:earthquake-data?brokers={{kafka.bootstrap.address}}");
 
         from("direct:tap")
+                .setBody(simple("Received message from USGS Earthquake Alert System: ${body}"))
                 .to("log:info");
     }
 }
