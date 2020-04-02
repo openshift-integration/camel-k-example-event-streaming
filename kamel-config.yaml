@@ -9,8 +9,6 @@ kamel:
         dependencies: '[mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005]'
       earthquake-consumer:
         property-files: '[config/application.properties]'
-      gate-keeper:
-        dependencies: '[camel-direct]'
       health-bridge:
         property-files: '[config/application.properties]'
         dependencies: '[mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005]'
