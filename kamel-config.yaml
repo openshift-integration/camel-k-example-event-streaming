@@ -23,5 +23,5 @@ kamel:
         property-files: '[config/application.properties]'
         dependencies: '[camel-jackson,camel-direct,camel-rest,camel-netty-http]'
       user-report-system:
-        dependencies: '[camel-direct,camel-jackson,camel-rest,camel-netty-http]'
+        dependencies: '[camel-netty-http]'
         secrets: '[example-event-streaming-user-reporting]'

@@ -7,7 +7,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.PropertyInject;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jackson.JacksonDataFormat;
+
+import org.apache.camel.model.dataformat.JsonLibrary;
 
 public class UserReportSystem extends RouteBuilder {
 
@@ -31,13 +32,10 @@ public class UserReportSystem extends RouteBuilder {
         from("direct:report-list")
                 .transform().constant("Not implemented");
 
-        JacksonDataFormat reportFormat = new JacksonDataFormat();
-        reportFormat.setUnmarshalType(Data.class);
-
         from("direct:report-new")
                 .streamCaching()
                 .wireTap("direct:audit")
-                .unmarshal(reportFormat)
+                .unmarshal().json(JsonLibrary.Jackson, Data.class)
                 .step()
                     .to("direct:authenticate")
                     .choice()
