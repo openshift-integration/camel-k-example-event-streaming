@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class Data {
 
     private User user;
@@ -19,6 +21,7 @@ public class Data {
         this.report = report;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class User {
         private String name;
         private String token;
