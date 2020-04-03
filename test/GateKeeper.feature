@@ -26,4 +26,4 @@ Feature: User report component test
     And receive HTTP 200
     And expect HTTP response body: OK
     Then integration gate-keeper should be running
-    And integration gate-keeper should print "type": "crime"
+    And integration gate-keeper should print "location": "${location}"
