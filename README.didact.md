@@ -86,13 +86,8 @@ execute the following command:
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20event-streaming-kafka-cluster&completion=Project%20created. "Created a new project for running AMQ Streams "){.didact})
 
 
-That creates a secluded space where AMQ Streams can run. To deploy it, we subscribe to the AMQ Streams channel by using the following command:
-
-```oc apply -f infra/kafka/amq-streams-subscription.yaml```
-
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fkafka%2Famq-streams-subscription.yaml&completion=Subscribed%20to%20the%20AMQ%20Streams%20channel. "Subscribes to the AMQ Streams channel"){.didact})
-
-This creates a subscription named amq-streams running on the `event-streaming-kafka-cluster` project.
+Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on left hand side menu and use it to find and install "Red Hat Integration - AMQ Streams".
+This will install the operator and may take couple minutes to install.
 
 The next step is to create use the operator to create an AMQ Streams cluster. This can be done with the command:
 
@@ -137,11 +132,9 @@ To create a new project run the following command:
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20event-streaming-messaging-broker&completion=Created%20new%20project%20for%20running%20the%20AMQ%20Broker. "Create project for running AMQ Broker"){.didact})
 
-To install the AMQ Broker operator, we subscribe to the AMQ Broker channel with the following command:
 
-```oc apply -f infra/messaging/broker/amq-broker-subscription.yaml```
-
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20-f%20infra%2Fmessaging%2Fbroker%2Famq-broker-subscription.yaml&completion=Subscribed%20to%20the%20AMQ%20Broker%20channel. "Subscribes to the AMQ Broker channel"){.didact})
+Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on left hand side menu and use it to find and install "AMQ Broker".
+This will install the operator and may take couple minutes to install.
 
 
 With the operator installed and running on the project, then we can proceed and create the broker instance:
