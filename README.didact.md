@@ -337,9 +337,9 @@ We can proceed to creating the build configuration and starting the build within
 following command replaces the URL for the timeline API on the Java Script code and launches an image build.
 
 
-```URL=$(oc get ksvc timeline-bridge -o 'jsonpath={.status.url}') ; oc new-build --docker-image="registry.access.redhat.com/rhscl/httpd-24-rhel7:latest" --to=front-end --build-arg="URL=$URL" --context-dir=front-end```
+```URL=$(oc get ksvc timeline-bridge -o 'jsonpath={.status.url}') ; cat ./front-end/Dockerfile| oc new-build --docker-image="registry.access.redhat.com/rhscl/httpd-24-rhel7:latest" --to=front-end --build-arg="URL=$URL" -D -```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$URL%3D%24(oc%20get%20ksvc%20timeline-bridge%20-o%20%27jsonpath%3D%7B.status.url%7D%27)%20%3B%20oc%20new-build%20--docker-image%3D%22registry.access.redhat.com%2Frhscl%2Fhttpd-24-rhel7%3Alatest%22%20--to%3Dfront-end%20--build-arg%3D%22URL%3D%24URL%22%20--context-dir%3Dfront-end&completion=Created%20the%20build%20configuration. "Creates the build configuration"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$URL%3D%24(oc%20get%20ksvc%20timeline-bridge%20-o%20%27jsonpath%3D%7B.status.url%7D%27)%20%3B%20cat%20.%2Ffront-end%2FDockerfile%7C%20oc%20new-build%20--docker-image%3D%22registry.access.redhat.com%2Frhscl%2Fhttpd-24-rhel7%3Alatest%22%20--to%3Dfront-end%20--build-arg%3D%22URL%3D%24URL%22%20-D%20-&completion=Created%20the%20build%20configuration. "Creates the build configuration"){.didact})
 
 
 With the build complete, we can go ahead and create a deployment for the front-end:

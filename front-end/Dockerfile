@@ -1,4 +1,4 @@
-FROM registry.redhat.io/rhscl/httpd-24-rhel7:latest
+FROM registry.access.redhat.com/rhscl/httpd-24-rhel7:latest
 ARG URL
 ENV URL ${URL:-unset}
 ARG REPO
