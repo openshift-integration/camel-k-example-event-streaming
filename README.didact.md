@@ -76,7 +76,7 @@ when certain incidents happen.
 
 ![Diagram](https://raw.githubusercontent.com/openshift-integration/camel-k-example-event-streaming/master/docs/Diagram.png)
 
-## Installing the AMQ Streams Cluster
+## 1. Installing the AMQ Streams Cluster
 
 We start by creating a project to run AMQ Streams, Red Hat's data streaming platform based on Apache Kafka. To do so, we have to
 execute the following command:
@@ -121,7 +121,7 @@ Once the AMQ Streams cluster is created. We can proceed to the creation of the A
 
 At this point, if all goes well, we should our AMQ Streams cluster up and running with several topics.
 
-## Installing the AMQ Broker Cluster
+## 2. Installing the AMQ Broker Cluster
 
 The installation of the AMQ Broker follows the same isolation pattern as the AMQ Streams one. We will deploy it in a separate project and will
 instruct the operator to deploy a broker according to the configuration.
@@ -158,7 +158,7 @@ If it was successfully created, then we can create the addresses and queues requ
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fmessaging%2Fbroker%2Finstances%2Faddresses&completion=Create%20the%20addresses. "Create the addresses"){.didact})
 
 
-## Creating the Event Streaming Project
+## 3. Creating the Event Streaming Project
 
 
 Now that the infrastructure is ready, we can go ahead and deploy the demo project. First, lets create a project for running the demo:
@@ -171,7 +171,7 @@ You need to be able to admin the project to run the demo. [Click here to verify 
 
 *Status: unknown*{#permissions-project-check}
 
-## Installing Camel-K
+## 4. Installing Camel-K
 
 Before we start running the demo, there's one last operator we need to install: the one used by Camel-K.
 
@@ -179,7 +179,7 @@ Before we start running the demo, there's one last operator we need to install: 
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20install&completion=Install%20Camel-K. "Install Camel-K"){.didact})
 
-## Deploying the Project
+## 5. Deploying the Project
 
 ### Initial Configuration
 
@@ -331,25 +331,15 @@ so with the command:
 This web front end queries the timeline bridge service and displays the events collected at the time. We will use
 OpenShift build services to build a container with the front-end and run it on the cluster.
 
-The front-end image leverages the offical [Apache Httpd 2.4](https://access.redhat.com/containers/?tab=tech-details#/registry.access.redhat.com/rhscl/httpd-24-rhel7) image from Red Hat's container registry. To download this image, we have to create a secret that contains the username and password
-for the registry so that the image can be downloaded. To do so, execute the following command replacing `$myUserName` with your username
-and `$myPassword` with your password:
+The front-end image leverages the offical [Apache Httpd 2.4](https://access.redhat.com/containers/?tab=tech-details#/registry.access.redhat.com/rhscl/httpd-24-rhel7) image from Red Hat's container registry. 
 
-```oc create secret docker-registry redhat-registry --docker-server=registry.redhat.io --docker-username=$myUserName --docker-password=$myPassword```
-
-With the secret created, we can import the image to the cluster internal registry:
-
-```oc import-image rhscl/httpd-24-rhel7 --from=registry.access.redhat.com/rhscl/httpd-24-rhel7 --confirm```
-
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20import-image%20rhscl%2Fhttpd-24-rhel7%20--from=registry.access.redhat.com%2Frhscl%2Fhttpd-24-rhel7%20--confirm&completion=Imported%20the%20image. "Imported httpd image"){.didact})
-
-Then we can proceed to creating the build configuration and starting the build within the OpenShift cluster. The
+We can proceed to creating the build configuration and starting the build within the OpenShift cluster. The
 following command replaces the URL for the timeline API on the Java Script code and launches an image build.
 
 
-```URL=$(oc get ksvc timeline-bridge -o 'jsonpath={.status.url}') ; cat ./front-end/Dockerfile|  oc new-build --docker-image="registry.redhat.io/rhscl/httpd-24-rhel7:latest" --to=front-end --build-arg="URL=$URL" -D -```
+```URL=$(oc get ksvc timeline-bridge -o 'jsonpath={.status.url}') ; oc new-build --docker-image="registry.access.redhat.com/rhscl/httpd-24-rhel7:latest" --to=front-end --build-arg="URL=$URL" --context-dir=front-end```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$URL=$%28oc%20get%20ksvc%20timeline-bridge%20-o%20%27jsonpath=%7B.status.url%7D%27%29%20%3B%20cat%20.%2Ffront-end%2FDockerfile%7C%20oc%20new-build%20--docker-image=registry.redhat.io%2Frhscl%2Fhttpd-24-rhel7:latest%20--to=front-end%20--build-arg=URL=$URL%20-D%20-&completion=Created%20the%20build%20configuration. "Creates the build configuration"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$URL%3D%24(oc%20get%20ksvc%20timeline-bridge%20-o%20%27jsonpath%3D%7B.status.url%7D%27)%20%3B%20oc%20new-build%20--docker-image%3D%22registry.access.redhat.com%2Frhscl%2Fhttpd-24-rhel7%3Alatest%22%20--to%3Dfront-end%20--build-arg%3D%22URL%3D%24URL%22%20--context-dir%3Dfront-end&completion=Created%20the%20build%20configuration. "Creates the build configuration"){.didact})
 
 
 With the build complete, we can go ahead and create a deployment for the front-end:
@@ -367,6 +357,8 @@ To find the public API for the service, we can run the following command:
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20routes%20front-end-external%20-o%20%27jsonpath=%7B.spec.port.targetPort%7D:%2F%2F%7B.spec.host%7D%27&completion=Found%20the%20front-end%20URL. "Gets the front-end URL"){.didact})
 
 Open this URL on the browser and we can now access the front-end.
+
+## 6. Uninstall
 
 To cleanup everything, execute the following command:
 
