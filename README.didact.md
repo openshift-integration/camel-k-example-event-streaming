@@ -86,16 +86,16 @@ execute the following command:
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20event-streaming-kafka-cluster&completion=Project%20created. "Created a new project for running AMQ Streams "){.didact})
 
 
-Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on left hand side menu and use it to find and install "Red Hat Integration - AMQ Streams".
-This will install the operator and may take couple minutes to install.
+Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install "Red Hat Integration - AMQ Streams".
+This will install the operator and may take a couple minutes to install.
 
-The next step is to create use the operator to create an AMQ Streams cluster. This can be done with the command:
+The next step is to use the operator to create an AMQ Streams cluster. This can be done with the command:
 
 ```oc create -f infra/kafka/clusters/event-streaming-cluster.yaml```
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20-f%20infra%2Fkafka%2Fclusters%2Fevent-streaming-cluster.yaml&completion=Created%20the%20AMQ%20Streams%20cluster. "Creates the AMQ Streams cluster"){.didact})
 
-Depending on how large is you OpenShift cluster, this may take a little. Let's run this command and wait until the cluster is up and running.
+Depending on how large your OpenShift cluster is, this may take a little while to complete. Let's run this command and wait until the cluster is up and running.
 
 ```oc wait kafka/event-streaming-kafka-cluster --for=condition=Ready --timeout=600s```
 
@@ -133,8 +133,8 @@ To create a new project run the following command:
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20event-streaming-messaging-broker&completion=Created%20new%20project%20for%20running%20the%20AMQ%20Broker. "Create project for running AMQ Broker"){.didact})
 
 
-Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on left hand side menu and use it to find and install "AMQ Broker".
-This will install the operator and may take couple minutes to install.
+Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install "AMQ Broker".
+This will install the operator and may take a couple minutes to install.
 
 
 With the operator installed and running on the project, then we can proceed and create the broker instance:
@@ -269,7 +269,7 @@ The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./audit
 ### Running the User Report System
 
 
-The [User Report System](didact://?commandId=vscode.open&projectFilePath=./user-report-system/UserReportSystem.java&newWindow=false&completion=Ok. "View the source code"){.didact}  simulates a service that is used to receive user-generated reports on the the system. It receives events sent by the user and sends them to the AMQ Streams instance. To run this component execute the following command:
+The [User Report System](didact://?commandId=vscode.open&projectFilePath=./user-report-system/UserReportSystem.java&newWindow=false&completion=Ok. "View the source code"){.didact}  simulates a service that is used to receive user-generated reports on the system. It receives events sent by the user and sends them to the AMQ Streams instance. To run this component execute the following command:
 
 ```kamel run user-report-system/UserReportSystem.java model/common/Data.java --name user-report-system```
 
@@ -331,10 +331,10 @@ so with the command:
 This web front end queries the timeline bridge service and displays the events collected at the time. We will use
 OpenShift build services to build a container with the front-end and run it on the cluster.
 
-The front-end image leverages the offical [Apache Httpd 2.4](https://access.redhat.com/containers/?tab=tech-details#/registry.access.redhat.com/rhscl/httpd-24-rhel7) image from Red Hat's container registry. 
+The front-end image leverages the official [Apache Httpd 2.4](https://access.redhat.com/containers/?tab=tech-details#/registry.access.redhat.com/rhscl/httpd-24-rhel7) image from Red Hat's container registry.
 
 We can proceed to creating the build configuration and starting the build within the OpenShift cluster. The
-following command replaces the URL for the timeline API on the Java Script code and launches an image build.
+following command replaces the URL for the timeline API on the Javascript code and launches an image build.
 
 
 ```URL=$(oc get ksvc timeline-bridge -o 'jsonpath={.status.url}') ; cat ./front-end/Dockerfile| oc new-build --docker-image="registry.access.redhat.com/rhscl/httpd-24-rhel7:latest" --to=front-end --build-arg="URL=$URL" -D -```
