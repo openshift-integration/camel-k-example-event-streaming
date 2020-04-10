@@ -24,7 +24,7 @@ public class TimelineBridge extends RouteBuilder {
                 .get("/timeline").to("direct:timeline");
 
 
-        from("kafka:timeline-data?brokers={{kafka.bootstrap.address}}")
+        from("kafka:timeline-data?brokers={{kafka.bootstrap.address}}&groupId=timelinebrige&autoOffsetReset=earliest")
                 .process(exchange -> {
                    while (incidents.size() >= MAX_INCIDENTS) {
                        incidents.remove(0);

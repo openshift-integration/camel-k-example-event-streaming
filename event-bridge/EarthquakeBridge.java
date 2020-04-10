@@ -26,7 +26,7 @@ public class EarthquakeBridge extends RouteBuilder {
         sjms2Component.setConnectionFactory(new ActiveMQConnectionFactory(messagingBrokerUrl));
         getContext().addComponent("sjms2", sjms2Component);
 
-        from("kafka:earthquake-data?brokers={{kafka.bootstrap.address}}")
+        from("kafka:earthquake-data?brokers={{kafka.bootstrap.address}}&groupId=earthquakebrige&autoOffsetReset=earliest")
                 .unmarshal().json(JsonLibrary.Jackson, Feature.class)
                 .process(exchange -> {
                     Feature feature = exchange.getMessage().getBody(Feature.class);

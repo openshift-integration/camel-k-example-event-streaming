@@ -29,7 +29,7 @@ public class PollutionBridge extends RouteBuilder {
         sjms2Component.setConnectionFactory(new JmsConnectionFactory(messagingBrokerUrl));
         getContext().addComponent("sjms2", sjms2Component);
 
-        from("kafka:pm-data?brokers={{kafka.bootstrap.address}}")
+        from("kafka:pm-data?brokers={{kafka.bootstrap.address}}&groupId=pmbrige&autoOffsetReset=earliest")
                 .unmarshal().json(JsonLibrary.Jackson, PollutionData.class)
                 .process(exchange -> {
                     final String TEXT_FORMAT =
