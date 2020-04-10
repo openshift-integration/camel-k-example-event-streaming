@@ -26,7 +26,7 @@ public class HealthBridge extends RouteBuilder {
         sjms2Component.setConnectionFactory(new ActiveMQConnectionFactory(messagingBrokerUrl));
         getContext().addComponent("sjms2", sjms2Component);
 
-        from("kafka:health-data?brokers={{kafka.bootstrap.address}}")
+        from("kafka:health-data?brokers={{kafka.bootstrap.address}}&groupId=healthbrige&autoOffsetReset=earliest")
                 .unmarshal().json(JsonLibrary.Jackson, Data.class)
                 .process(exchange -> {
                     Data eventData = exchange.getMessage().getBody(Data.class);
