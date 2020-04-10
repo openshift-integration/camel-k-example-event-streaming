@@ -5,11 +5,9 @@ metadata:
   labels:
     app: camel-k-example-event-streaming
 spec:
-  type: NodePort
   ports:
     - name: http
       port: 8080
-      nodePort: 30080
   selector:
     app: camel-k-example-event-streaming
     component: front-end

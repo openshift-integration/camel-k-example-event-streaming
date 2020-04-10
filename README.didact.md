@@ -9,8 +9,49 @@ Make sure you check-out this repository from git and open it with [VSCode](https
 Instructions are based on [VSCode Didact](https://github.com/redhat-developer/vscode-didact), so make sure it's installed
 from the VSCode extensions marketplace.
 
-From the VSCode UI, click on the `readme.didact.md` file and select "Didact: Start Didact tutorial from File". A new Didact tab will be opened in VS Code.
+From the VSCode UI, right-click on the `readme.didact.md` file and select "Didact: Start Didact tutorial from File". A new Didact tab will be opened in VS Code.
 
+Make sure you've opened this readme file with Didact before jumping to the next section.
+
+## Preparing the cluster
+
+This example can be run on any OpenShift 4.3+ cluster or a local development instance (such as [CRC](https://github.com/code-ready/crc)). Ensure that you have a cluster available and login to it using the OpenShift `oc` command line tool.
+
+You need to create a new project named `camel-k-event-streaming` for running this example. This can be done directly from the OpenShift web console or by executing the command `oc new-project camel-k-event-streaming` on a terminal window.
+
+You need to install the Camel K operator in the `camel-k-event-streaming` project. To do so, go to the OpenShift 4.x web console, login with a cluster admin account and use the OperatorHub menu item on the left to find and install **"Red Hat Integration - Camel K"**. You will be given the option to install it globally on the cluster or on a specific namespace.
+If using a specific namespace, make sure you select the `camel-k-event-streaming` project from the dropdown list.
+This completes the installation of the Camel K operator (it may take a couple of minutes).
+
+When the operator is installed, from the OpenShift Help menu ("?") at the top of the WebConsole, you can access the "Command Line Tools" page, where you can download the **"kamel"** CLI, that is required for running this example. The CLI must be installed in your system path.
+
+Refer to the **"Red Hat Integration - Camel K"** documentation for a more detailed explanation of the installation steps for the operator and the CLI.
+
+### Installing the AMQ Streams Operator
+
+This example uses AMQ Streams, Red Hat's data streaming platform based on Apache Kafka.
+We want to install it on a new project named `event-streaming-kafka-cluster`. 
+
+You need to create the `event-streaming-kafka-cluster` project from the OpenShift web console or by executing the command `oc new-project event-streaming-kafka-cluster` on a terminal window. 
+
+Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install **"Red Hat Integration - AMQ Streams"**.
+This will install the operator and may take a couple minutes to install.
+
+### Installing the AMQ Broker Operator
+
+The installation of the AMQ Broker follows the same isolation pattern as the AMQ Streams one. We will deploy it in a separate project and will
+instruct the operator to deploy a broker according to the configuration.
+
+You need to create the `event-streaming-messaging-broker` project from the OpenShift web console or by executing the command `oc new-project event-streaming-messaging-broker` on a terminal window. 
+
+Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install **"Red Hat Integration - AMQ Broker"**.
+This will install the operator and may take a couple minutes to install.
+
+### Installing OpenShift Serverless
+
+This demo also needs OpenShift Serverless (Knative) installed and working.
+
+Refer to the [OpenShift Serverless Documentation](https://docs.openshift.com/container-platform/4.3/serverless/installing_serverless/installing-openshift-serverless.html) for instructions on how to install it on your cluster.
 
 ## Requirements
 
@@ -76,18 +117,13 @@ when certain incidents happen.
 
 ![Diagram](https://raw.githubusercontent.com/openshift-integration/camel-k-example-event-streaming/master/docs/Diagram.png)
 
-## 1. Installing the AMQ Streams Cluster
+## 1. Creating the AMQ Streams Cluster
 
-We start by creating a project to run AMQ Streams, Red Hat's data streaming platform based on Apache Kafka. To do so, we have to
-execute the following command:
+We switch to the `event-streaming-kafka-cluster` project to create the Kafka cluster:
 
-```oc new-project event-streaming-kafka-cluster```
+```oc project event-streaming-kafka-cluster```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20event-streaming-kafka-cluster&completion=Project%20created. "Created a new project for running AMQ Streams "){.didact})
-
-
-Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install "Red Hat Integration - AMQ Streams".
-This will install the operator and may take a couple minutes to install.
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20project%20event-streaming-kafka-cluster&completion=Project%20changed. "Switched to the project that will run AMQ Streams "){.didact})
 
 The next step is to use the operator to create an AMQ Streams cluster. This can be done with the command:
 
@@ -121,23 +157,15 @@ Once the AMQ Streams cluster is created. We can proceed to the creation of the A
 
 At this point, if all goes well, we should our AMQ Streams cluster up and running with several topics.
 
-## 2. Installing the AMQ Broker Cluster
+## 2. Creating the AMQ Broker Cluster
 
-The installation of the AMQ Broker follows the same isolation pattern as the AMQ Streams one. We will deploy it in a separate project and will
-instruct the operator to deploy a broker according to the configuration.
+To switch to the `event-streaming-messaging-broker` project, run the following command:
 
-To create a new project run the following command:
+```oc project event-streaming-messaging-broker```
 
-```oc new-project event-streaming-messaging-broker```
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20project%20event-streaming-messaging-broker&completion=Switched%20to%20project%20for%20running%20the%20AMQ%20Broker. "Switched to the project that will run the AMQ Broker"){.didact})
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20event-streaming-messaging-broker&completion=Created%20new%20project%20for%20running%20the%20AMQ%20Broker. "Create project for running AMQ Broker"){.didact})
-
-
-Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install "AMQ Broker".
-This will install the operator and may take a couple minutes to install.
-
-
-With the operator installed and running on the project, then we can proceed and create the broker instance:
+Having already the operator installed and running on the project, we can proceed to create the broker instance:
 
 
 ```oc create -f infra/messaging/broker/instances/amq-broker-instance.yaml```
@@ -158,28 +186,13 @@ If it was successfully created, then we can create the addresses and queues requ
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fmessaging%2Fbroker%2Finstances%2Faddresses&completion=Create%20the%20addresses. "Create the addresses"){.didact})
 
 
-## 3. Creating the Event Streaming Project
+## 3. Deploying the Project
 
+Now that the infrastructure is ready, we can go ahead and deploy the demo project. First, lets switch to the main project:
 
-Now that the infrastructure is ready, we can go ahead and deploy the demo project. First, lets create a project for running the demo:
+```oc project camel-k-event-streaming```
 
-```oc new-project camel-k-event-streaming```
-
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20new-project%20camel-k-event-streaming&completion=Switched%20to%20the%20demo%20project. "Switched to the demo project"){.didact})
-
-You need to be able to admin the project to run the demo. [Click here to verify your permissions.](didact://?commandId=vscode.didact.requirementCheck&text=permissions-project-check$$oc%20auth%20can-i%20admin%20project$$yes&completion=Verified%20that%20the%20you%20have%20correct%20permissions. "Verifies if you can admin the project"){.didact}
-
-*Status: unknown*{#permissions-project-check}
-
-## 4. Installing Camel-K
-
-Before we start running the demo, there's one last operator we need to install: the one used by Camel-K.
-
-```kamel install```
-
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20install&completion=Install%20Camel-K. "Install Camel-K"){.didact})
-
-## 5. Deploying the Project
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20project%20camel-k-event-streaming&completion=Switched%20to%20the%20demo%20project. "Switched to the demo project"){.didact})
 
 ### Initial Configuration
 
@@ -358,7 +371,7 @@ To find the public API for the service, we can run the following command:
 
 Open this URL on the browser and we can now access the front-end.
 
-## 6. Uninstall
+## 4. Uninstall
 
 To cleanup everything, execute the following command:
 
