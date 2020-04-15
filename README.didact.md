@@ -205,7 +205,7 @@ They provide the addresses of the services running on the cluster and can be use
 We start by opening the file [./config/application.properties](didact://?commandId=vscode.open&projectFilePath=./config/application.properties&newWindow=false&completion=Ok. "Edit the config map"){.didact} and editing the parameters. The content needs to be adjusted to point to the correct addresses of the brokers. It should be similar to this:
 
 ```
-kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-brokers.event-streaming-kafka-cluster:9094
+kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap.event-streaming-kafka-cluster:9092
 messaging.broker.url=tcp://broker-hdls-svc.event-streaming-messaging-broker:61616
 ```
 
