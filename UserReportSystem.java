@@ -10,6 +10,8 @@ import org.apache.camel.builder.RouteBuilder;
 
 import org.apache.camel.model.dataformat.JsonLibrary;
 
+import com.redhat.integration.common.Data;
+
 public class UserReportSystem extends RouteBuilder {
 
     @PropertyInject("users.allowed")
@@ -19,11 +21,6 @@ public class UserReportSystem extends RouteBuilder {
         final String AUTH_HEADER = "authorized";
         final String VALID_HEADER = "valid";
         final String REPORT_TYPE_HEADER = "type";
-
-        restConfiguration()
-                .component("netty-http")
-                .host("0.0.0.0")
-                .port("8080");
 
         rest("/")
                 .get("/report/list").to("direct:report-list")

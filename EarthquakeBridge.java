@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.camel.model.dataformat.JsonLibrary;
 
+import com.redhat.integration.common.Alert;
+import com.redhat.integration.earthquake.Feature;
 
 public class EarthquakeBridge extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(EarthquakeBridge.class);

@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.camel.model.dataformat.JsonLibrary;
 
+import com.redhat.integration.pollution.OpenAQData;
+import com.redhat.integration.pollution.PollutionData;
+
 public class OpenAQConsumer extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(OpenAQConsumer.class);
 
