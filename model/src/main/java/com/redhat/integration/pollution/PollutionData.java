@@ -1,3 +1,5 @@
+package com.redhat.integration.pollution;
+
 import java.util.Date;
 
 public class PollutionData {

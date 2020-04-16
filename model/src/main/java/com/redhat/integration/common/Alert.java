@@ -1,3 +1,5 @@
+package com.redhat.integration.common;
+
 public class Alert {
     private String text;
     private String severity;

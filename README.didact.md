@@ -194,10 +194,42 @@ Now that the infrastructure is ready, we can go ahead and deploy the demo projec
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20project%20camel-k-event-streaming&completion=Switched%20to%20the%20demo%20project. "Switched to the demo project"){.didact})
 
+We should now check that the operator is installed. To do so, execute the following command on a terminal:
+
+```
+oc get csv
+```
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20csv&completion=Checking%20Cluster%20Service%20Versions. "Opens a new terminal and sends the command above"){.didact})
+
+When Camel K is installed, you should find an entry related to `red-hat-camel-k-operator` in phase `Succeeded`.
+
+After successful installation, we'll configure an `IntegrationPlatform` with specific default settings using the following command:
+
+```
+kamel install --olm=false --skip-cluster-setup --skip-operator-setup --maven-repository  https://jitpack.io@id=jitpack@snapshots
+```
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20install%20--olm=false%20--skip-cluster-setup%20--skip-operator-setup%20--maven-repository %20https://jitpack.io@id=jitpack@snapshots&completion=Camel%20K%20IntegrationPlatform%20creation. "Opens a new terminal and sends the command above"){.didact})
+
+NOTE: We use `Jitpack` to package the model project into a shared JAR that will be used by all integrations in this project, hence we add https://jitpack.io to the list of Maven repositories known to the operator. This configuration is handy but not intended for a production scenario.
+For production, we suggest you to deploy the model JAR into your own maven registry and reference it in the platform configuration. 
+
+Camel K should have created an IntegrationPlatform custom resource in your project. To verify it:
+
+```
+oc get integrationplatform
+```
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20integrationplatform&completion=Camel%20K%20integration%20platform%20verification. "Opens a new terminal and sends the command above"){.didact})
+
+If everything is ok, you should see an IntegrationPlatform named `camel-k` with phase `Ready` (it can take some time for the 
+operator to being installed).
+
 ### Initial Configuration
 
-Most of the components of the demo use use the [./config/application.properties](didact://?commandId=vscode.open&projectFilePath=./config/application.properties&newWindow=false&completion=Ok. "Edit the secret configuration"){.didact} to read the configurations they need to run. This file already comes with
+Most of the components of the demo use use the [./application.properties](didact://?commandId=vscode.open&projectFilePath=./application.properties&newWindow=false&completion=Ok. "Edit the application configuration"){.didact} to read the configurations they need to run. This file already comes with
 expected defaults, so no action should be needed.
+
+To reduce the amount of parameters passed to the `kamel` CLI, the [./kamel-config.yaml](didact://?commandId=vscode.open&projectFilePath=./kamel-config.yaml&newWindow=false&completion=Ok. "Edit the kamel configuration"){.didact} file has been used to set some default parameters.
+That configuration file is automatically read by the `kamel` CLI when executing a command. For instance, the `model` JAR is automatically added to the set of dependencies each time you execute `kamel run ...`.
 
 #### Optional: Configuration Adjustments
 
@@ -215,7 +247,7 @@ In case you need to adjust the configuration, the following 2 commands present i
 
 They provide the addresses of the services running on the cluster and can be used to fill in the values on the properties file.
 
-We start by opening the file [./config/application.properties](didact://?commandId=vscode.open&projectFilePath=./config/application.properties&newWindow=false&completion=Ok. "Edit the config map"){.didact} and editing the parameters. The content needs to be adjusted to point to the correct addresses of the brokers. It should be similar to this:
+We start by opening the file [./application.properties](didact://?commandId=vscode.open&projectFilePath=./application.properties&newWindow=false&completion=Ok. "Edit the config map"){.didact} and editing the parameters. The content needs to be adjusted to point to the correct addresses of the brokers. It should be similar to this:
 
 ```
 kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap.event-streaming-kafka-cluster:9092
@@ -229,19 +261,19 @@ accessible, it simulates checking the access control by reading a secret.
 
 We can push the secret to the cluster using the following command:
 
-```oc create secret generic example-event-streaming-user-reporting --from-file config/application.properties```
+```oc create secret generic example-event-streaming-user-reporting --from-file application.properties```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20secret%20generic%20example-event-streaming-user-reporting%20--from-file%20config%2Fapplication.properties&completion=Created%20the%20secret%20configuration. "Creates the secret configuration"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20secret%20generic%20example-event-streaming-user-reporting%20--from-file%20application.properties&completion=Created%20the%20secret%20configuration. "Creates the secret configuration"){.didact})
 
 With this configuration secret created on the cluster, we have completed the initial steps to get the demo running.
 
 ### Running the OpenAQ Consumer
 
-Now we will deploy the first component of the demo: [./openaq-consumer/OpenAQConsumer.java](didact://?commandId=vscode.open&projectFilePath=./openaq-consumer/OpenAQConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact}
+Now we will deploy the first component of the demo: [./OpenAQConsumer.java](didact://?commandId=vscode.open&projectFilePath=./OpenAQConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact}
 
-```kamel run openaq-consumer/OpenAQConsumer.java model/pollution/* --name open-aq-consumer```
+```kamel run OpenAQConsumer.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20openaq-consumer%2FOpenAQConsumer.java%20model%2Fpollution%2F*%20--name%20open-aq-consumer&completion=Started%20the%20OpenAQ%20Consumer. "Creates and starts the OpenAQ Consumer"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20OpenAQConsumer.java&completion=Started%20the%20OpenAQ%20Consumer. "Creates and starts the OpenAQ Consumer"){.didact})
 
 
 **Details**: this starts an integration that consumes data from the [OpenAQ](https://docs.openaq.org/) API, splits each record and sends them to
@@ -251,11 +283,11 @@ code and used to reach the instance.
 
 ### Running the USGS Earthquake Alert System Consumer
 
-The second component on our demo is a [consumer](didact://?commandId=vscode.open&projectFilePath=./usgs-consumer/EarthquakeConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact} for events from the [USGS Earthquake Alert System](https://earthquake.usgs.gov/fdsnws/event/1/).
+The second component on our demo is a [consumer](didact://?commandId=vscode.open&projectFilePath=./EarthquakeConsumer.java&newWindow=false&completion=Ok. "View the source code"){.didact} for events from the [USGS Earthquake Alert System](https://earthquake.usgs.gov/fdsnws/event/1/).
 
-```kamel run usgs-consumer/EarthquakeConsumer.java model/earthquake/* --name earthquake-consumer```
+```kamel run EarthquakeConsumer.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20usgs-consumer%2FEarthquakeConsumer.java%20model%2Fearthquake%2F*%20--name%20earthquake-consumer&completion=Started%20the%20USGS%20Earhquake%20Alert%20Consumer. "Creates and starts the USGS Earthquake Alert Consumer"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20EarthquakeConsumer.java&completion=Started%20the%20USGS%20Earhquake%20Alert%20Consumer. "Creates and starts the USGS Earthquake Alert Consumer"){.didact})
 
 
 **Details**: this works in a similar way to the OpenAQ consumer.
@@ -271,22 +303,22 @@ them on the OpenShift cluster. To do so we can execute the following command:
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20apply%20-f%20infra%2Fknative%2Fchannels%2Faudit-channel.yaml&completion=Create%20Knative%20eventing%20channel. "Create knative eventing channel"){.didact})
 
 
-The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./audit-gatekeeper/GateKeeper.java&newWindow=false&completion=Ok. "View the source code"){.didact} simulates a service that is used to audit accesses to the system. It leverages knative support from Camel-K.
+The [Gatekeeper service](didact://?commandId=vscode.open&projectFilePath=./GateKeeper.java&newWindow=false&completion=Ok. "View the source code"){.didact} simulates a service that is used to audit accesses to the system. It leverages knative support from Camel-K.
 
-```kamel run audit-gatekeeper/GateKeeper.java```
+```kamel run GateKeeper.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20audit-gatekeeper%2FGateKeeper.java&completion=Run%20the%20GateKeeper%20audit. "Run the GateKeeper audit"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20GateKeeper.java&completion=Run%20the%20GateKeeper%20audit. "Run the GateKeeper audit"){.didact})
 
 **Details**: this works in a similar way to the OpenAQ consumer.
 
 ### Running the User Report System
 
 
-The [User Report System](didact://?commandId=vscode.open&projectFilePath=./user-report-system/UserReportSystem.java&newWindow=false&completion=Ok. "View the source code"){.didact}  simulates a service that is used to receive user-generated reports on the system. It receives events sent by the user and sends them to the AMQ Streams instance. To run this component execute the following command:
+The [User Report System](didact://?commandId=vscode.open&projectFilePath=./UserReportSystem.java&newWindow=false&completion=Ok. "View the source code"){.didact}  simulates a service that is used to receive user-generated reports on the system. It receives events sent by the user and sends them to the AMQ Streams instance. To run this component execute the following command:
 
-```kamel run user-report-system/UserReportSystem.java model/common/Data.java --name user-report-system```
+```kamel run UserReportSystem.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20user-report-system%2FUserReportSystem.java%20model%2Fcommon%2FData.java%20--name%20user-report-system&completion=Run%20the%20User%20Report%20System. "Run the User Report System"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20UserReportSystem.java&completion=Run%20the%20User%20Report%20System. "Run the User Report System"){.didact})
 
 
 ### Running the Service Bridges
@@ -297,36 +329,36 @@ The service bridges consume the event data and prepare them for consumption.
 
 This service consumes the pollution events and sends it to the timeline topic for consumption.
 
-```kamel run event-bridge/PollutionBridge.java model/common/Alert.java model/pollution/PollutionData.java --name pollution-bridge```
+```kamel run PollutionBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FPollutionBridge.java%20model%2Fcommon%2FAlert.java%20model%2Fpollution%2FPollutionData.java%20--name%20pollution-bridge&completion=Run%20the%20Pollution%20bridge. "Run the Pollution bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20PollutionBridge.java&completion=Run%20the%20Pollution%20bridge. "Run the Pollution bridge"){.didact})
 
 
 #### Running the Earthquake Bridge
 
-```kamel run event-bridge/EarthquakeBridge.java model/common/Alert.java model/earthquake/Feature.java --name earthquake-bridge```
+```kamel run EarthquakeBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FEarthquakeBridge.java%20model%2Fcommon%2FAlert.java%20model%2Fearthquake%2FFeature.java%20--name%20earthquake-bridge&completion=Run%20the%20Earthquake%20Bridge. "Run the Earthquake Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20EarthquakeBridge.java&completion=Run%20the%20Earthquake%20Bridge. "Run the Earthquake Bridge"){.didact})
 
 
 #### Running the Health Alert Bridge
 
-```kamel run event-bridge/HealthBridge.java model/common/* --name health-bridge```
+```kamel run HealthBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FHealthBridge.java%20model%2Fcommon%2F*%20--name%20health-bridge&completion=Run%20the%20HealthBridge. "Run the HealthBridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20HealthBridge.java&completion=Run%20the%20HealthBridge. "Run the HealthBridge"){.didact})
 
 
 #### Running the Crime Bridge
 
-```kamel run event-bridge/CrimeBridge.java model/common/* --name crime-bridge```
+```kamel run CrimeBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FCrimeBridge.java%20model%2Fcommon%2F*%20--name%20crime-bridge&completion=Run%20the%20CrimeBridge. "Run the CrimeBridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20CrimeBridge.java&completion=Run%20the%20CrimeBridge. "Run the CrimeBridge"){.didact})
 
 #### Running the Timeline Bridge
 
-```kamel run event-bridge/TimelineBridge.java```
+```kamel run TimelineBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20event-bridge%2FTimelineBridge.java&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20TimelineBridge.java&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
 
 
 #### Checking the State of the Integrations

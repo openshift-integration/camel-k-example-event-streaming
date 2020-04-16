@@ -1,3 +1,5 @@
+package com.redhat.integration.common;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class Data {
