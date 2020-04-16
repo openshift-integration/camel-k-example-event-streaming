@@ -208,7 +208,7 @@ After successful installation, we'll configure an `IntegrationPlatform` with spe
 ```
 kamel install --olm=false --skip-cluster-setup --skip-operator-setup --maven-repository  https://jitpack.io@id=jitpack@snapshots
 ```
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20install%20--olm=false%20--skip-cluster-setup%20--skip-operator-setup%20--maven-repository %20https://jitpack.io@id=jitpack@snapshots&completion=Camel%20K%20IntegrationPlatform%20creation. "Opens a new terminal and sends the command above"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20install%20--olm=false%20--skip-cluster-setup%20--skip-operator-setup%20--maven-repository%20https://jitpack.io@id=jitpack@snapshots&completion=Camel%20K%20IntegrationPlatform%20creation. "Opens a new terminal and sends the command above"){.didact})
 
 NOTE: We use `Jitpack` to package the model project into a shared JAR that will be used by all integrations in this project, hence we add https://jitpack.io to the list of Maven repositories known to the operator. This configuration is handy but not intended for a production scenario.
 For production, we suggest you to deploy the model JAR into your own maven registry and reference it in the platform configuration. 

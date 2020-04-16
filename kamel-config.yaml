@@ -2,26 +2,26 @@ kamel:
   run:
     integration:
       crime-bridge:
-        property-files: '[config/application.properties]'
-        dependencies: '[mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005,mvn:com.github.nicolaferraro/camel-k-example-event-streaming/master-SNAPSHOT]'
+        property-files: '[application.properties]'
+        dependencies: '[mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005,mvn:com.github.nicolaferraro.camel-k-example-event-streaming/model/master-SNAPSHOT]'
       earthquake-bridge:
-        property-files: '[config/application.properties]'
-        dependencies: '[mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005,mvn:com.github.nicolaferraro/camel-k-example-event-streaming/master-SNAPSHOT]'
+        property-files: '[application.properties]'
+        dependencies: '[mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005,mvn:com.github.nicolaferraro.camel-k-example-event-streaming/model/master-SNAPSHOT]'
       earthquake-consumer:
-        property-files: '[config/application.properties]'
-        dependencies: '[mvn:com.github.nicolaferraro/camel-k-example-event-streaming/master-SNAPSHOT]'
+        property-files: '[application.properties]'
+        dependencies: '[mvn:com.github.nicolaferraro.camel-k-example-event-streaming/model/master-SNAPSHOT]'
       health-bridge:
-        property-files: '[config/application.properties]'
-        dependencies: '[mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005,mvn:com.github.nicolaferraro/camel-k-example-event-streaming/master-SNAPSHOT]'
+        property-files: '[application.properties]'
+        dependencies: '[mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005,mvn:com.github.nicolaferraro.camel-k-example-event-streaming/model/master-SNAPSHOT]'
       open-aq-consumer:
-        property-files: '[config/application.properties]'
-        dependencies: '[mvn:com.github.nicolaferraro/camel-k-example-event-streaming/master-SNAPSHOT]'
+        property-files: '[application.properties]'
+        dependencies: '[mvn:com.github.nicolaferraro.camel-k-example-event-streaming/model/master-SNAPSHOT]'
       pollution-bridge:
-        property-files: '[config/application.properties]'
-        dependencies: '[mvn:org.apache.qpid:qpid-jms-client:0.45.0.redhat-00002,mvn:com.github.nicolaferraro/camel-k-example-event-streaming/master-SNAPSHOT]'
+        property-files: '[application.properties]'
+        dependencies: '[mvn:org.apache.qpid:qpid-jms-client:0.45.0.redhat-00002,mvn:com.github.nicolaferraro.camel-k-example-event-streaming/model/master-SNAPSHOT]'
       timeline-bridge:
-        property-files: '[config/application.properties]'
-        dependencies: '[camel-jackson,camel-direct,camel-rest,camel-netty-http,mvn:com.github.nicolaferraro/camel-k-example-event-streaming/master-SNAPSHOT]'
+        property-files: '[application.properties]'
+        dependencies: '[camel-jackson,camel-direct,camel-rest,camel-netty-http,mvn:com.github.nicolaferraro.camel-k-example-event-streaming/model/master-SNAPSHOT]'
       user-report-system:
-        dependencies: '[camel-netty-http,mvn:com.github.nicolaferraro/camel-k-example-event-streaming/master-SNAPSHOT]'
+        dependencies: '[camel-netty-http,mvn:com.github.nicolaferraro.camel-k-example-event-streaming/model/master-SNAPSHOT]'
         secrets: '[example-event-streaming-user-reporting]'
