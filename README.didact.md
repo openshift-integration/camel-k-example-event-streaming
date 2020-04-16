@@ -356,9 +356,9 @@ This service consumes the pollution events and sends it to the timeline topic fo
 
 #### Running the Timeline Bridge
 
-```kamel run TimelineBridge.java```
+```kamel run TimelineBridge.java -t quarkus.enabled=true -p quarkus.http.cors=true```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20TimelineBridge.java&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20TimelineBridge.java%20-t%20quarkus.enabled=true%20-p%20quarkus.http.cors=true&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
 
 
 #### Checking the State of the Integrations

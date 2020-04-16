@@ -21,7 +21,7 @@ kamel:
         dependencies: '[mvn:org.apache.qpid:qpid-jms-client:0.45.0.redhat-00002,mvn:com.github.nicolaferraro:camel-k-example-event-streaming:master-SNAPSHOT]'
       timeline-bridge:
         property-files: '[application.properties]'
-        dependencies: '[camel-jackson,camel-direct,camel-rest,camel-netty-http,mvn:com.github.nicolaferraro:camel-k-example-event-streaming:master-SNAPSHOT]'
+        dependencies: '[camel-jackson,mvn:com.github.nicolaferraro:camel-k-example-event-streaming:master-SNAPSHOT]'
       user-report-system:
-        dependencies: '[camel-netty-http,mvn:com.github.nicolaferraro:camel-k-example-event-streaming:master-SNAPSHOT]'
+        dependencies: '[mvn:com.github.nicolaferraro:camel-k-example-event-streaming:master-SNAPSHOT]'
         secrets: '[example-event-streaming-user-reporting]'

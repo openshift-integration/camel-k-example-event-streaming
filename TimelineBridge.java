@@ -14,11 +14,6 @@ public class TimelineBridge extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        restConfiguration()
-                .component("netty-http")
-                .host("0.0.0.0")
-                .enableCORS(true)
-                .port("8080");
 
         rest("/")
                 .get("/timeline").to("direct:timeline");
