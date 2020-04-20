@@ -4,7 +4,6 @@ Feature: User report component test
     Given integration user-report-system should be running
     And URL: http://user-report-system.camel-k-event-streaming.svc.cluster.local
     And variable user is "user1"
-    And integration user-report-system should print started and consuming from: http://0.0.0.0:8080/report/new
 
   Scenario: Crime report is send to crime-data topic
     Given Kafka connection
