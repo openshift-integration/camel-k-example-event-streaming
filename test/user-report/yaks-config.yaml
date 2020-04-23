@@ -1,0 +1,18 @@
+config:
+  namespace:
+    temporary: true
+pre:
+  - name: Knative channel setup
+    run: oc create -f ../../infra/knative/channels/audit-channel.yaml -n ${YAKS_NAMESPACE}
+  - name: Create secret
+    run: oc create secret generic example-event-streaming-user-reporting --from-file ../../application.properties -n ${YAKS_NAMESPACE}
+  - name: Kafka setup
+    script: ../scripts/installAMQStreams.sh
+  - name: Camel-K setup
+    run: |
+      # move to project home to verify provided kamel-config.yaml
+      cd ../..
+      kamel install --maven-repository https://jitpack.io@id=jitpack@snapshots -w -n ${YAKS_NAMESPACE}
+      kamel run UserReportSystem.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -t knative-service.min-scale=1
+      kamel run GateKeeper.java -n ${YAKS_NAMESPACE} -t knative-service.min-scale=1
+

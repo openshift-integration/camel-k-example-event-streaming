@@ -1,0 +1,8 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: event-streaming
+  namespace: YAKS_NAMESPACE
+spec:
+  targetNamespaces:
+    - YAKS_NAMESPACE

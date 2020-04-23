@@ -1,13 +1,18 @@
-Feature: User report component test
+Feature: User report and gate-keeper component test
 
   Background:
     Given integration user-report-system should be running
-    And URL: http://user-report-system.camel-k-event-streaming.svc.cluster.local
-    And variable user is "user1"
+    And integration gate-keeper should be running
+    Given HTTP request timeout is 60000 ms
+    Given URL: http://user-report-system.${CLUSTER_WILDCARD_DOMAIN}
+    And wait for GET on URL http://user-report-system.${CLUSTER_WILDCARD_DOMAIN}/report/list
+    And wait for POST on URL http://gate-keeper.${CLUSTER_WILDCARD_DOMAIN}
+    Given HTTP request header Content-Type is "application/json"
+    Given variable user is "user1"
 
   Scenario: Crime report is send to crime-data topic
     Given Kafka connection
-      | url           | event-streaming-kafka-cluster-kafka-bootstrap.event-streaming-kafka-cluster:9092 |
+      | url           | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
       | topic         | crime-data |
       | consumerGroup | crime      |
     And variable location is "citrus:randomString(10)"
@@ -42,10 +47,12 @@ Feature: User report component test
         }
       }
     """
+    Then integration gate-keeper should be running
+    And integration gate-keeper should print "location": "${location}"
 
   Scenario: Health report is send to health-data topic
     Given Kafka connection
-      | url           | event-streaming-kafka-cluster-kafka-bootstrap.event-streaming-kafka-cluster:9092 |
+      | url           | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
       | topic         | health-data |
       | consumerGroup | health      |
     And variable location is "citrus:randomString(10)"
@@ -81,3 +88,4 @@ Feature: User report component test
         }
       }
     """
+    And integration gate-keeper should print "location": "${location}"
