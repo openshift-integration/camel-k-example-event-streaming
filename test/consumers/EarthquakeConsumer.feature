@@ -2,7 +2,7 @@ Feature: Earthquake consumer test
 
   Background:
     Given Kafka connection
-        | url       | event-streaming-kafka-cluster-kafka-bootstrap.event-streaming-kafka-cluster:9092 |
+        | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
         | topic     | earthquake-data |
 
   Scenario: EarthquakeConsumer pulls from USGS Earthquake API and pushes events to Kafka

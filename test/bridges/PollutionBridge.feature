@@ -3,11 +3,11 @@ Feature: Pollution bridge test
 
   Background:
     Given Kafka connection
-        | url       | event-streaming-kafka-cluster-kafka-bootstrap.event-streaming-kafka-cluster:9092 |
+        | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
         | topic     | pm-data |
     And JMS connection factory
         | type      | org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory |
-        | brokerUrl | tcp://broker-hdls-svc.event-streaming-messaging-broker:61616     |
+        | brokerUrl | tcp://broker-hdls-svc:61616     |
 
   Scenario: Short term alerts ends in JMS queue:alarms
     Given jms destination: alarms
