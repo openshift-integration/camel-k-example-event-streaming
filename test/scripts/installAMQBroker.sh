@@ -25,9 +25,10 @@ oc create -f "${INFRA}"/messaging/broker/instances/amq-broker-instance.yaml -n $
 waitFor oc get pod -l ActiveMQArtemis=broker -n ${YAKS_NAMESPACE}
 oc wait pod -l ActiveMQArtemis=broker --for condition=Ready --timeout=600s -n ${YAKS_NAMESPACE}
 
-# wait for broker to become ready
-sleep 20
+waitFor [[ `oc get ActiveMQArtemis broker -o=jsonpath='{.status.podStatus.ready}' -n ${YAKS_NAMESPACE}` !=  "" ]]
 
+sleep 30
 #install addresses
 oc apply -f "${INFRA}"/messaging/broker/instances/addresses -n ${YAKS_NAMESPACE}
+
 
