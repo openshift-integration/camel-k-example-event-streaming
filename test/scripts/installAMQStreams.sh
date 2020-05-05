@@ -7,6 +7,7 @@ function waitFor() {
   done
 }
 
+TIMEOUT=${TIMEOUT:-30}
 SOURCE=$(dirname "${BASH_SOURCE[0]}")
 INFRA="${SOURCE}"/../../infra
 
@@ -25,8 +26,8 @@ oc create -f "${INFRA}"/kafka/clusters/event-streaming-cluster.yaml -n ${YAKS_NA
 oc wait kafka/event-streaming-kafka-cluster --for=condition=Ready --timeout=600s -n ${YAKS_NAMESPACE}
 
 #install topics
-sleep 10
+sleep $TIMEOUT
 oc apply -f "${INFRA}"/kafka/clusters/topics -n ${YAKS_NAMESPACE}
 
 # wait for topics creation
-sleep 30
+sleep $TIMEOUT
