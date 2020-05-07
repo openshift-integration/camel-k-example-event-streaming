@@ -1,10 +1,12 @@
 #!/bin/bash
 
 function waitFor() {
-  for i in {1..20}; do
+  for i in {1..30}; do
     sleep 5
-    "$@" &>/dev/null && return
+    ("$@") && return
+    echo "$i Waiting for exit code of command \"$@\"."
   done
+  exit 1
 }
 
 TIMEOUT=${TIMEOUT:-30}
@@ -18,8 +20,7 @@ sed "s/YAKS_NAMESPACE/${YAKS_NAMESPACE}/" "${SOURCE}"/resources/operatorGroup.ya
 oc create -f "${SOURCE}"/resources/amq-streams-subscription.yaml -n ${YAKS_NAMESPACE}
 
 #ensure operator pod is deployed and Ready
-waitFor oc get pod -l name=amq-streams-cluster-operator -n ${YAKS_NAMESPACE}
-oc wait pod -l name=amq-streams-cluster-operator --for condition=Ready --timeout=60s -n ${YAKS_NAMESPACE}
+waitFor oc wait pod -l name=amq-streams-cluster-operator --for condition=Ready --timeout=60s -n ${YAKS_NAMESPACE}
 
 #create Kafka
 oc create -f "${INFRA}"/kafka/clusters/event-streaming-cluster.yaml -n ${YAKS_NAMESPACE}
@@ -29,5 +30,5 @@ oc wait kafka/event-streaming-kafka-cluster --for=condition=Ready --timeout=600s
 sleep $TIMEOUT
 oc apply -f "${INFRA}"/kafka/clusters/topics -n ${YAKS_NAMESPACE}
 
-# wait for topics creation
+# wait for topics initialization
 sleep $TIMEOUT
