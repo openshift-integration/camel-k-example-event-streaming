@@ -1,6 +1,8 @@
 # Camel K: Event Streaming Example
 
-This demo uses several features from Camel K, Kafka and OpenShift to implement a system that handles different types of hazards and alert information.
+This demo shows how Camel K can be used as glue for connecting various eventing platforms together (**Knative Eventing**, **Kafka** and **AMQ**) to develop advanced real-life applications.
+
+The scenario implemented here is a system that handles different types of hazards and alert information.
 
 ## Before you begin
 
@@ -51,7 +53,13 @@ This will install the operator and may take a couple minutes to install.
 
 This demo also needs OpenShift Serverless (Knative) installed and working.
 
-Refer to the [OpenShift Serverless Documentation](https://docs.openshift.com/container-platform/4.3/serverless/installing_serverless/installing-openshift-serverless.html) for instructions on how to install it on your cluster.
+Go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side then find and install **"OpenShift Serverless"** 
+from a channel that best matches your OpenShift version.
+
+The operator installation page reports links to the documentation where you can find information about **additional steps** that must
+be done in order to have OpenShift serverless completely installed into your cluster.
+
+Make sure you follow all the steps in the documentation before continuing to the next section.
 
 ## Requirements
 
@@ -84,7 +92,7 @@ access all Camel K features.
 
 **Knative installed on the OpenShift cluster**
 
-The cluster also needs to have Knative installed and working.
+The cluster also needs to have Knative installed and working. Refer to steps above for information on how to install it in your cluster.
 
 [Check if the Knative is installed](didact://?commandId=vscode.didact.requirementCheck&text=kservice-project-check$$oc%20api-resources%20--api-group=serving.knative.dev$$kservice%2Cksvc&completion=Verified%20Knative%20services%20installation. "Verifies if Knative is installed"){.didact}
 
