@@ -1,3 +1,4 @@
+@require('com.consol.citrus:citrus-validation-hamcrest:@citrus.version@')
 Feature: OpenAQ consumer test
 
   Background:
