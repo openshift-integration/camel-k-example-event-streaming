@@ -4,9 +4,7 @@ Feature: User report and gate-keeper component test
     Given integration user-report-system should be running
     And integration gate-keeper should be running
     Given HTTP request timeout is 60000 ms
-    Given URL: http://user-report-system.${CLUSTER_WILDCARD_DOMAIN}
-    And wait for GET on URL http://user-report-system.${CLUSTER_WILDCARD_DOMAIN}/report/list
-    And wait for POST on URL http://gate-keeper.${CLUSTER_WILDCARD_DOMAIN}
+    Given URL: http://user-report-system.${YAKS_NAMESPACE}.svc.cluster.local
     Given HTTP request header Content-Type is "application/json"
     Given variable user is "user1"
 
