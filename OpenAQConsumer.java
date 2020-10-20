@@ -1,4 +1,5 @@
-// camel-k: language=java
+// camel-k: language=java property-file=application.properties
+// camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming
 
 import static java.util.stream.Collectors.toList;
 

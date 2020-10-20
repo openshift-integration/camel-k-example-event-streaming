@@ -2,10 +2,12 @@ package com.redhat.integration.pollution;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PollutionData {
     public static class DateInfo {
         private Date utc;
-        private Date local;
 
         public Date getUtc() {
             return utc;
@@ -15,13 +17,6 @@ public class PollutionData {
             this.utc = utc;
         }
 
-        public Date getLocal() {
-            return local;
-        }
-
-        public void setLocal(Date local) {
-            this.local = local;
-        }
     }
 
     public static class Coordinates {
