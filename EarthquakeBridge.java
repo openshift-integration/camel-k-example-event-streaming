@@ -1,4 +1,5 @@
-// camel-k: language=java
+// camel-k: language=java property-file=application.properties
+// camel-k: dependency=mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005 dependency=github:openshift-integration:camel-k-example-event-streaming
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;

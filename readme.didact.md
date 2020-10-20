@@ -211,32 +211,12 @@ oc get csv
 
 When Camel K is installed, you should find an entry related to `red-hat-camel-k-operator` in phase `Succeeded`.
 
-After successful installation, we'll configure an `IntegrationPlatform` with specific default settings using the following command:
-
-```
-kamel install --olm=false --skip-cluster-setup --skip-operator-setup --maven-repository  https://jitpack.io@id=jitpack@snapshots
-```
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20install%20--olm=false%20--skip-cluster-setup%20--skip-operator-setup%20--maven-repository%20https://jitpack.io@id=jitpack@snapshots&completion=Camel%20K%20IntegrationPlatform%20creation. "Opens a new terminal and sends the command above"){.didact})
-
-NOTE: We use `Jitpack` to package the model project into a shared JAR that will be used by all integrations in this project, hence we add https://jitpack.io to the list of Maven repositories known to the operator. This configuration is handy but experimental and it may change in the GA version. In a production scenario, we suggest you to deploy the model JAR into your own Maven registry and reference it in the platform configuration.
-
-Camel K should have created an IntegrationPlatform custom resource in your project. To verify it:
-
-```
-oc get integrationplatform
-```
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20integrationplatform&completion=Camel%20K%20integration%20platform%20verification. "Opens a new terminal and sends the command above"){.didact})
-
-If everything is ok, you should see an IntegrationPlatform named `camel-k` with phase `Ready` (it can take some time for the 
-operator to being installed).
+NOTE: We use `Jitpack` to package the model project into a shared JAR that will be used by all integrations in this project. This configuration is handy but experimental and it may change in future versions. In a production scenario, we suggest you to deploy the model JAR into your own Maven registry and reference it in the platform configuration.
 
 ### Initial Configuration
 
 Most of the components of the demo use use the [./application.properties](didact://?commandId=vscode.open&projectFilePath=./application.properties&newWindow=false&completion=Ok. "Edit the application configuration"){.didact} to read the configurations they need to run. This file already comes with
 expected defaults, so no action should be needed.
-
-To reduce the amount of parameters passed to the `kamel` CLI, the [./kamel-config.yaml](didact://?commandId=vscode.open&projectFilePath=./kamel-config.yaml&newWindow=false&completion=Ok. "Edit the kamel configuration"){.didact} file has been used to set some default parameters.
-That configuration file is automatically read by the `kamel` CLI when executing a command. For instance, the `model` JAR is automatically added to the set of dependencies each time you execute `kamel run ...`.
 
 #### Optional: Configuration Adjustments
 
@@ -363,9 +343,9 @@ This service consumes the pollution events and sends it to the timeline topic fo
 
 #### Running the Timeline Bridge
 
-```kamel run TimelineBridge.java -p customizer.platform-http.cors.enabled=true```
+```kamel run TimelineBridge.java```
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20TimelineBridge.java%20-p%20customizer.platform-http.cors.enabled=true&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kamel%20run%20TimelineBridge.java&completion=Run%20the%20Timeline%20Bridge. "Run the Timeline Bridge"){.didact})
 
 
 #### Checking the State of the Integrations

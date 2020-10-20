@@ -1,4 +1,5 @@
-// camel-k: language=java
+// camel-k: language=java property-file=application.properties
+// camel-k: dependency=mvn:org.apache.qpid:qpid-jms-client:0.45.0.redhat-00002 dependency=github:openshift-integration:camel-k-example-event-streaming
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.qpid.jms.JmsConnectionFactory;

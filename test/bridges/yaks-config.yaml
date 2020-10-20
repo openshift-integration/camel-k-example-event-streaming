@@ -10,7 +10,7 @@ pre:
     run: |
       # move to project home to verify provided kamel-config.yaml
       cd ../..
-      kamel install --maven-repository https://jitpack.io@id=jitpack@snapshots -w -n ${YAKS_NAMESPACE}
+      kamel install -w -n ${YAKS_NAMESPACE}
       kamel run PollutionBridge.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p messaging.broker.url.amqp=amqp://broker-hdls-svc:5672
       kamel run EarthquakeBridge.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p messaging.broker.url=tcp://broker-hdls-svc:61616
       kamel run HealthBridge.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p messaging.broker.url=tcp://broker-hdls-svc:61616
