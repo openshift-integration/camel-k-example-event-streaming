@@ -4,8 +4,9 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class PollutionData {
+    
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DateInfo {
         private Date utc;
 
