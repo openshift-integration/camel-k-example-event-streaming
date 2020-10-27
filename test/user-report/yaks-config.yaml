@@ -12,7 +12,7 @@ pre:
     run: |
       # move to project home to verify provided kamel-config.yaml
       cd ../..
-      kamel install --maven-repository https://jitpack.io@id=jitpack@snapshots -w -n ${YAKS_NAMESPACE}
+      kamel install -w -n ${YAKS_NAMESPACE}
       kamel run UserReportSystem.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -t knative-service.min-scale=1
       kamel run GateKeeper.java -n ${YAKS_NAMESPACE} -t knative-service.min-scale=1
 
