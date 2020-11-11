@@ -13,8 +13,8 @@ Feature: Pollution bridge test
     Given jms destination: alarms
     And variable uniqueCity is "citrus:randomString(10)"
     And jms selector: city='${uniqueCity}'
-    And integration pollution-bridge is running
-    When send message to Kafka with body
+    And Camel-K integration pollution-bridge is running
+    When send Kafka message with body
     """
     {
       "location": "",
@@ -33,7 +33,7 @@ Feature: Pollution bridge test
       "city": "${uniqueCity}"
     }
   """
-    Then expect message in JMS broker with body
+    Then expect JMS message body
     """
     {
       "text": "City ${uniqueCity} exceeds the maximum safe levels for PM 10 exposure: 85.000000.",
@@ -45,8 +45,8 @@ Feature: Pollution bridge test
     Given jms destination: notifications
     And variable uniqueCity is "citrus:randomString(10)"
     And jms selector: city='${uniqueCity}'
-    And integration pollution-bridge is running
-    When send message to Kafka with body
+    And Camel-K integration pollution-bridge is running
+    When send Kafka message with body
     """
     {
       "location": "",
@@ -65,7 +65,7 @@ Feature: Pollution bridge test
       "city": "${uniqueCity}"
     }
     """
-    Then expect message in JMS broker with body
+    Then expect JMS message body
     """
     {
       "text": "City ${uniqueCity} exceeds the maximum safe levels for PM 10 exposure: 10.000000.",

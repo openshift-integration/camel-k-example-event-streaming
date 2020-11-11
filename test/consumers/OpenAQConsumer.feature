@@ -7,9 +7,9 @@ Feature: OpenAQ consumer test
         | topic     | pm-data |
 
   Scenario: OpenAQConsumer pulls from OpenAQ API and pushes events to Kafka
-    Given integration open-aq-consumer is running
-    Then integration open-aq-consumer should print Received message from OpenAQ
-    And expect message in Kafka with body
+    Given Camel-K integration open-aq-consumer is running
+    Then Camel-K integration open-aq-consumer should print Received message from OpenAQ
+    And expect Kafka message with body
     """
     {
       "location": "@assertThat(notNullValue())@",

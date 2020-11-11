@@ -7,9 +7,9 @@ Feature: Earthquake consumer test
         | topic     | earthquake-data |
 
   Scenario: EarthquakeConsumer pulls from USGS Earthquake API and pushes events to Kafka
-    Given integration earthquake-consumer is running
-    Then integration earthquake-consumer should print Received message from USGS Earthquake Alert System
-    And expect message in Kafka with body
+    Given Camel-K integration earthquake-consumer is running
+    Then Camel-K integration earthquake-consumer should print Received message from USGS Earthquake Alert System
+    And expect Kafka message with body
     """
     {
       "type": "@assertThat(notNullValue())@",

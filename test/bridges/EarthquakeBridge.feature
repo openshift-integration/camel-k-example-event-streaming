@@ -12,8 +12,8 @@ Feature: Pollution bridge test
   Scenario: Alerts ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
-    And integration earthquake-bridge is running
-    When send message to Kafka with body
+    And Camel-K integration earthquake-bridge is running
+    When send Kafka message with body
     """
     {
       "type": "citrus:randomString(10)",
@@ -52,7 +52,7 @@ Feature: Pollution bridge test
     }
     """
     And jms destination: alarms
-    Then expect message in JMS broker with body
+    Then expect JMS message body
     """
     {
       "text": "Critical geological event: ${title}",
@@ -60,7 +60,7 @@ Feature: Pollution bridge test
     }
     """
     And jms destination: notifications
-    Then expect message in JMS broker with body
+    Then expect JMS message body
     """
     {
       "text": "Critical geological event: ${title}",
@@ -71,8 +71,8 @@ Feature: Pollution bridge test
 Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
-    And integration earthquake-bridge is running
-    When send message to Kafka with body
+    And Camel-K integration earthquake-bridge is running
+    When send Kafka message with body
     """
     {
       "type": "citrus:randomString(10)",
@@ -111,7 +111,7 @@ Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and qu
     }
     """
     And jms destination: alarms
-    Then expect message in JMS broker with body
+    Then expect JMS message body
     """
     {
       "text": "Critical geological event: ${title}",
@@ -119,7 +119,7 @@ Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and qu
     }
     """
     And jms destination: notifications
-    Then expect message in JMS broker with body
+    Then expect JMS message body
     """
     {
       "text": "Critical geological event: ${title}",
@@ -130,8 +130,8 @@ Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and qu
 Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
-    And integration earthquake-bridge is running
-    When send message to Kafka with body
+    And Camel-K integration earthquake-bridge is running
+    When send Kafka message with body
     """
     {
       "type": "citrus:randomString(10)",
@@ -170,7 +170,7 @@ Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and qu
     }
     """
     And jms destination: alarms
-    Then expect message in JMS broker with body
+    Then expect JMS message body
     """
     {
       "text": "Critical geological event: ${title} with possibility of tsunami",
@@ -178,7 +178,7 @@ Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and qu
     }
     """
     And jms destination: notifications
-    Then expect message in JMS broker with body
+    Then expect JMS message body
     """
     {
       "text": "Critical geological event: ${title} with possibility of tsunami",
