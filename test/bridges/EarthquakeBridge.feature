@@ -1,5 +1,5 @@
 @require('org.apache.activemq:artemis-jms-client:2.11.0')
-Feature: Pollution bridge test
+Feature: Earthquake bridge test
 
   Background:
     Given Kafka connection
@@ -52,7 +52,7 @@ Feature: Pollution bridge test
     }
     """
     And jms destination: alarms
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "Critical geological event: ${title}",
@@ -60,7 +60,7 @@ Feature: Pollution bridge test
     }
     """
     And jms destination: notifications
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "Critical geological event: ${title}",
@@ -111,7 +111,7 @@ Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and qu
     }
     """
     And jms destination: alarms
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "Critical geological event: ${title}",
@@ -119,7 +119,7 @@ Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and qu
     }
     """
     And jms destination: notifications
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "Critical geological event: ${title}",
@@ -170,7 +170,7 @@ Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and qu
     }
     """
     And jms destination: alarms
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "Critical geological event: ${title} with possibility of tsunami",
@@ -178,7 +178,7 @@ Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and qu
     }
     """
     And jms destination: notifications
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "Critical geological event: ${title} with possibility of tsunami",

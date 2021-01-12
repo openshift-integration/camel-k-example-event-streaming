@@ -33,7 +33,7 @@ Feature: Pollution bridge test
       "city": "${uniqueCity}"
     }
   """
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "City ${uniqueCity} exceeds the maximum safe levels for PM 10 exposure: 85.000000.",
@@ -65,7 +65,7 @@ Feature: Pollution bridge test
       "city": "${uniqueCity}"
     }
     """
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "City ${uniqueCity} exceeds the maximum safe levels for PM 10 exposure: 10.000000.",

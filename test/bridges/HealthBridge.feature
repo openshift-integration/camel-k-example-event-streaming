@@ -1,5 +1,5 @@
 @require('org.apache.activemq:artemis-jms-client:2.11.0')
-Feature: Pollution bridge test
+Feature: Health bridge test
 
   Background:
     Given Kafka connection
@@ -28,7 +28,7 @@ Feature: Pollution bridge test
         }
       }
   """
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "There is a health incident on ${location}",
@@ -55,7 +55,7 @@ Feature: Pollution bridge test
         }
       }
   """
-    Then expect JMS message body
+    Then expect JMS message with body
     """
     {
       "text": "There is a health incident on ${location}",
