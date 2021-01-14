@@ -1,5 +1,5 @@
 @require('org.apache.activemq:artemis-jms-client:2.11.0')
-Feature: Pollution bridge test
+Feature: Crime bridge test
 
   Background:
     Given Kafka connection
@@ -13,8 +13,8 @@ Feature: Pollution bridge test
     Given jms destination: alarms
     And variable location is "citrus:randomString(10)"
     And jms selector: location='${location}'
-    And integration crime-bridge is running
-    When send message to Kafka with body
+    And Camel-K integration crime-bridge is running
+    When send Kafka message with body
     """
       {
         "user": {
@@ -28,7 +28,7 @@ Feature: Pollution bridge test
         }
       }
   """
-    Then expect message in JMS broker with body
+    Then expect JMS message with body
     """
     {
       "text": "There is a crime incident on ${location}",
@@ -40,8 +40,8 @@ Feature: Pollution bridge test
     Given jms destination: notifications
     And variable location is "citrus:randomString(10)"
     And jms selector: location='${location}'
-    And integration crime-bridge is running
-    When send message to Kafka with body
+    And Camel-K integration crime-bridge is running
+    When send Kafka message with body
     """
       {
         "user": {
@@ -55,7 +55,7 @@ Feature: Pollution bridge test
         }
       }
   """
-    Then expect message in JMS broker with body
+    Then expect JMS message with body
     """
     {
       "text": "There is a crime incident on ${location}",
