@@ -1,5 +1,7 @@
 // camel-k: language=java property-file=application.properties
 // camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming
+// camel-k: dependency=camel-http
+// camel-k: dependency=camel-quarkus-http
 
 import static java.util.stream.Collectors.toList;
 
@@ -38,7 +40,7 @@ public class OpenAQConsumer extends RouteBuilder {
         from("timer:refresh?period={{consumers.fetch.period}}&fixedRate=true")
                 .log("OpenAQ route running")
                 .setHeader(Exchange.HTTP_METHOD).constant("GET")
-                .to("https://api.openaq.org/v1/measurements?limit={{consumers.fetch.limit}}")
+                .to("{{consumers.fetch.url}}?limit={{consumers.fetch.limit}}")
                 .unmarshal().json(JsonLibrary.Jackson, OpenAQData.class)
 
                 /*
@@ -58,5 +60,6 @@ public class OpenAQConsumer extends RouteBuilder {
         from("direct:tap")
                 .setBody(simple("Received message from OpenAQ: ${body}"))
                 .to("log:info");
+
     }
 }
