@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "alexkrechik.cucumberautocomplete",
     "redhat.vscode-didact",
     "redhat.apache-camel-extension-pack"
   ]
