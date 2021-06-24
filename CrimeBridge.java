@@ -57,9 +57,9 @@ public class CrimeBridge extends RouteBuilder {
                 .wireTap("direct:timeline")
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))
-                        .to("sjms2://queue:alarms?ttl={{messaging.ttl.alarms}}")
+                        .to("sjms2://queue:alarms?timeToLive={{messaging.ttl.alarms}}")
                     .otherwise()
-                        .to("sjms2://queue:notifications?ttl={{messaging.ttl.notifications}}");
+                        .to("sjms2://queue:notifications?timeToLive={{messaging.ttl.notifications}}");
 
         from("direct:timeline")
                 .log("${body}")
