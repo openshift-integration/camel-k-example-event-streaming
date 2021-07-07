@@ -181,7 +181,7 @@ Having already the operator installed and running on the project, we can proceed
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20create%20-f%20infra%2Fmessaging%2Fbroker%2Finstances%2Famq-broker-instance.yaml&completion=Created%20AMQ%20Broker%20instance. "Creates the AMQ Broker instance"){.didact})
 
 
-We can use the `oc get activemqartermis` command to check if the AMQ Broker instance is created:
+We can use the `oc get activemqartemises` command to check if the AMQ Broker instance is created:
 
 ```oc get activemqartemises```
 
