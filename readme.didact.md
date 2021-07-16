@@ -17,7 +17,7 @@ Make sure you've opened this readme file with Didact before jumping to the next 
 
 ## Preparing the cluster
 
-This example can be run on any OpenShift 4.3+ cluster or a local development instance (such as [CRC](https://github.com/code-ready/crc)). Ensure that you have a cluster available and login to it using the OpenShift `oc` command line tool.
+This example can be run on any OpenShift 4.6+ cluster or a local development instance (such as [CRC](https://github.com/code-ready/crc)). Ensure that you have a cluster available and login to it using the OpenShift `oc` command line tool.
 
 You need to create a new project named `camel-k-event-streaming` for running this example. This can be done directly from the OpenShift web console or by executing the command `oc new-project camel-k-event-streaming` on a terminal window.
 
@@ -32,9 +32,9 @@ Refer to the **"Red Hat Integration - Camel K"** documentation for a more detail
 ### Installing the AMQ Streams Operator
 
 This example uses AMQ Streams, Red Hat's data streaming platform based on Apache Kafka.
-We want to install it on a new project named `event-streaming-kafka-cluster`. 
+We want to install it on a new project named `event-streaming-kafka-cluster`.
 
-You need to create the `event-streaming-kafka-cluster` project from the OpenShift web console or by executing the command `oc new-project event-streaming-kafka-cluster` on a terminal window. 
+You need to create the `event-streaming-kafka-cluster` project from the OpenShift web console or by executing the command `oc new-project event-streaming-kafka-cluster` on a terminal window.
 
 Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install **"Red Hat Integration - AMQ Streams"**.
 This will install the operator and may take a couple minutes to install.
@@ -44,7 +44,7 @@ This will install the operator and may take a couple minutes to install.
 The installation of the AMQ Broker follows the same isolation pattern as the AMQ Streams one. We will deploy it in a separate project and will
 instruct the operator to deploy a broker according to the configuration.
 
-You need to create the `event-streaming-messaging-broker` project from the OpenShift web console or by executing the command `oc new-project event-streaming-messaging-broker` on a terminal window. 
+You need to create the `event-streaming-messaging-broker` project from the OpenShift web console or by executing the command `oc new-project event-streaming-messaging-broker` on a terminal window.
 
 Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install **"Red Hat Integration - AMQ Broker"**.
 This will install the operator and may take a couple minutes to install.
@@ -53,7 +53,7 @@ This will install the operator and may take a couple minutes to install.
 
 This demo also needs OpenShift Serverless (Knative) installed and working.
 
-Go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side then find and install **"OpenShift Serverless"** 
+Go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side then find and install **"OpenShift Serverless"**
 from a channel that best matches your OpenShift version.
 
 The operator installation page reports links to the documentation where you can find information about **additional steps** that must
