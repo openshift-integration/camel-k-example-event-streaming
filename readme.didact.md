@@ -238,7 +238,7 @@ We start by opening the file [./application.properties](didact://?commandId=vsco
 
 ```
 kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap.event-streaming-kafka-cluster:9092
-messaging.broker.url=tcp://broker-hdls-svc.event-streaming-messaging-broker:61616
+quarkus.qpid-jms.url=amqp://broker-hdls-svc.event-streaming-messaging-broker:5672
 ```
 
 #### Creating the Secret
