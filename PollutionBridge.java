@@ -1,12 +1,7 @@
 // camel-k: language=java property=file:application.properties
-// camel-k: dependency=mvn:org.apache.qpid:qpid-jms-client:0.45.0.redhat-00002 dependency=github:openshift-integration:camel-k-example-event-streaming
+// camel-k: dependency=mvn:org.amqphub.quarkus:quarkus-qpid-jms dependency=github:openshift-integration:camel-k-example-event-streaming
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.qpid.jms.JmsConnectionFactory;
-import org.apache.camel.PropertyInject;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.sjms2.Sjms2Component;
-import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,20 +13,12 @@ import com.redhat.integration.pollution.PollutionData;
 public class PollutionBridge extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(PollutionBridge.class);
 
-    @PropertyInject("messaging.broker.url.amqp")
-    private String messagingBrokerUrl;
-
     public void configure() throws Exception {
         final String unsafeHeader = "unsafe";
         final String unsafeTypeHeader = "unsafe-type";
         final String cityHeader = "city";
         final String SHORT_TERM = "short term";
         final String LONG_TERM = "long term";
-
-        Sjms2Component sjms2Component = new Sjms2Component();
-        // Note that this component is using AMQP instead of Core protocol like the others
-        sjms2Component.setConnectionFactory(new JmsConnectionFactory(messagingBrokerUrl));
-        getContext().addComponent("sjms2", sjms2Component);
 
         from("kafka:pm-data?brokers={{kafka.bootstrap.address}}&groupId=pmbrige&autoOffsetReset=earliest")
                 .unmarshal().json(JsonLibrary.Jackson, PollutionData.class)
@@ -96,9 +83,9 @@ public class PollutionBridge extends RouteBuilder {
                         .wireTap("direct:timeline")
                         .choice()
                             .when(header(unsafeTypeHeader).isEqualTo(SHORT_TERM))
-                                .to("sjms2://queue:alarms?timeToLive={{messaging.ttl.alarms}}")
+                                .to("jms://queue:alarms?timeToLive={{messaging.ttl.alarms}}")
                             .when(header(unsafeTypeHeader).isEqualTo(LONG_TERM))
-                                .to("sjms2://queue:notifications?timeToLive={{messaging.ttl.notifications}}")
+                                .to("jms://queue:notifications?timeToLive={{messaging.ttl.notifications}}")
                             .otherwise()
                                 .log("Unexpected data: ${body}")
                             .endChoice()

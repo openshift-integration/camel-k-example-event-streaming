@@ -1,12 +1,7 @@
 // camel-k: language=java property=file:application.properties
-// camel-k: dependency=mvn:org.apache.activemq:artemis-jms-client:2.11.0.redhat-00005 dependency=github:openshift-integration:camel-k-example-event-streaming
+// camel-k: dependency=mvn:org.amqphub.quarkus:quarkus-qpid-jms dependency=github:openshift-integration:camel-k-example-event-streaming
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
-import org.apache.camel.PropertyInject;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.sjms2.Sjms2Component;
-import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,16 +13,9 @@ import com.redhat.integration.earthquake.Feature;
 public class EarthquakeBridge extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(EarthquakeBridge.class);
 
-    @PropertyInject("messaging.broker.url")
-    String messagingBrokerUrl;
-
     public void configure() throws Exception {
         final String unsafeHeader = "unsafe";
         final String titleHeader = "title";
-
-        Sjms2Component sjms2Component = new Sjms2Component();
-        sjms2Component.setConnectionFactory(new ActiveMQConnectionFactory(messagingBrokerUrl));
-        getContext().addComponent("sjms2", sjms2Component);
 
         from("kafka:earthquake-data?brokers={{kafka.bootstrap.address}}&groupId=earthquakebrige&autoOffsetReset=earliest")
                 .unmarshal().json(JsonLibrary.Jackson, Feature.class)
@@ -63,7 +51,7 @@ public class EarthquakeBridge extends RouteBuilder {
                 .choice()
                     .when(header(unsafeHeader).isEqualTo(true))
                         .wireTap("direct:timeline")
-                        .to("sjms2://queue:alarms?timeToLive={{messaging.ttl.alarms}}", "sjms2://queue:notifications?timeToLive={{messaging.ttl.notifications}}");
+                        .to("jms://queue:alarms?timeToLive={{messaging.ttl.alarms}}", "jms://queue:notifications?timeToLive={{messaging.ttl.notifications}}");
 
         from("direct:timeline")
                 .log("${body}")
