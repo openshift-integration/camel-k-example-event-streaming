@@ -12,5 +12,5 @@ pre:
       # move to project home to verify provided kamel-config.yaml
       cd ../..
       kamel install -w -n ${YAKS_NAMESPACE}
-      kamel run OpenAQConsumer.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p consumers.fetch.url=http://openaq-mock:8080/measurements.json
+      kamel run OpenAQConsumer.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p consumers.fetch.url=http://openaq-mock:8080/measurements.json -p consumers.fetch.period=5000
       kamel run EarthquakeConsumer.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092
