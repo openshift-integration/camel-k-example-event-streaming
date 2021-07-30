@@ -3,7 +3,7 @@ kind: Subscription
 metadata:
   name: amq-broker
 spec:
-  channel: current
+  channel: 7.x
   installPlanApproval: Automatic
   name: amq-broker
   source: redhat-operators
