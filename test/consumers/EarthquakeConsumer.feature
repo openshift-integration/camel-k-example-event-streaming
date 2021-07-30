@@ -1,4 +1,5 @@
 @require('com.consol.citrus:citrus-validation-hamcrest:@citrus.version@')
+@require('org.hamcrest:hamcrest:2.2')
 Feature: Earthquake consumer test
 
   Background:
