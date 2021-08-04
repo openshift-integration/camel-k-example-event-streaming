@@ -2,12 +2,18 @@
 Feature: Health bridge test
 
   Background:
+    Given Disable auto removal of Camel-K resources
+    Given Disable variable support in Camel-K sources
     Given Kafka connection
         | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
         | topic     | health-data |
     And JMS connection factory
         | type      | org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory |
-        | brokerUrl | tcp://broker-hdls-svc:61616     |
+        | brokerUrl | tcp://broker-hdls-svc:61616 |
+
+  Scenario: Run HealthBridge Camel-K integration
+    Given Camel-K integration property file application-test.properties
+    Then load Camel-K integration HealthBridge.java
 
   Scenario: Alerts ends in JMS queue:alarms
     Given jms destination: alarms
@@ -61,4 +67,4 @@ Feature: Health bridge test
       "text": "There is a health incident on ${location}",
       "severity": "yellow"
     }
-    """ 
+    """

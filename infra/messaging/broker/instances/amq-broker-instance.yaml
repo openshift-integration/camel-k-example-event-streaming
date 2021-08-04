@@ -5,6 +5,13 @@ metadata:
 spec:
   deploymentPlan:
     size: 1
+    persistenceEnabled: false
+    requireLogin: false
+    messageMigration: false
+    managementRBACEnabled: true
+    journalType: nio
+    jolokiaAgentEnabled: false
+    image: placeholder
   acceptors:
     - name: artemis_acceptor
       protocols: artemis,core,openwire

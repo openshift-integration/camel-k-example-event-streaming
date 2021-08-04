@@ -2,12 +2,18 @@
 Feature: Earthquake bridge test
 
   Background:
+    Given Disable auto removal of Camel-K resources
+    Given Disable variable support in Camel-K sources
     Given Kafka connection
         | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
         | topic     | earthquake-data |
     And JMS connection factory
         | type      | org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory |
-        | brokerUrl | tcp://broker-hdls-svc:61616     |
+        | brokerUrl | tcp://broker-hdls-svc:61616 |
+
+  Scenario: Run EarthquakeBridge Camel-K integration
+    Given Camel-K integration property file application-test.properties
+    Then load Camel-K integration EarthquakeBridge.java
 
   Scenario: Alerts ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
@@ -67,7 +73,7 @@ Feature: Earthquake bridge test
       "severity": "red"
     }
     """
-    
+
 Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
@@ -185,4 +191,4 @@ Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and qu
       "severity": "red"
     }
     """
-    
+

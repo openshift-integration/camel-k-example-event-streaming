@@ -2,12 +2,18 @@
 Feature: Pollution bridge test
 
   Background:
+    Given Disable auto removal of Camel-K resources
+    Given Disable variable support in Camel-K sources
     Given Kafka connection
         | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
         | topic     | pm-data |
     And JMS connection factory
         | type      | org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory |
-        | brokerUrl | tcp://broker-hdls-svc:61616     |
+        | brokerUrl | tcp://broker-hdls-svc:61616 |
+
+  Scenario: Run PollutionBridge Camel-K integration
+    Given Camel-K integration property file application-test.properties
+    Then load Camel-K integration PollutionBridge.java
 
   Scenario: Short term alerts ends in JMS queue:alarms
     Given jms destination: alarms
