@@ -3,9 +3,15 @@
 Feature: Earthquake consumer test
 
   Background:
+    Given Disable auto removal of Camel-K resources
+    Given Disable variable support in Camel-K sources
     Given Kafka connection
         | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
         | topic     | earthquake-data |
+
+  Scenario: Run EarthquakeConsumer Camel-K integration
+    Given Camel-K integration property file application-test.properties
+    Then load Camel-K integration EarthquakeConsumer.java
 
   Scenario: EarthquakeConsumer pulls from USGS Earthquake API and pushes events to Kafka
     Given Camel-K integration earthquake-consumer is running
