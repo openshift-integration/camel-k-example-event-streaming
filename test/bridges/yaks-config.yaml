@@ -1,6 +1,13 @@
 config:
   namespace:
     temporary: true
+  runtime:
+    resources:
+      - ../../CrimeBridge.java
+      - ../../EarthquakeBridge.java
+      - ../../HealthBridge.java
+      - ../../PollutionBridge.java
+      - ../application-test.properties
 pre:
   - name: Kafka setup
     script: ../scripts/installAMQStreams.sh
@@ -11,7 +18,3 @@ pre:
       # move to project home to verify provided kamel-config.yaml
       cd ../..
       kamel install -w -n ${YAKS_NAMESPACE}
-      kamel run PollutionBridge.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p messaging.broker.url.amqp=amqp://broker-hdls-svc:5672
-      kamel run EarthquakeBridge.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p messaging.broker.url=tcp://broker-hdls-svc:61616
-      kamel run HealthBridge.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p messaging.broker.url=tcp://broker-hdls-svc:61616
-      kamel run CrimeBridge.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p messaging.broker.url=tcp://broker-hdls-svc:61616
