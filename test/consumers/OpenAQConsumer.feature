@@ -3,11 +3,16 @@
 Feature: OpenAQ consumer test
 
   Background:
-    Given Disable auto removal of Camel-K resources
-    Given Disable variable support in Camel-K sources
+    Given load variables application-test.properties
+    Given variables
+      | kafka.topic   | pm-data |
+    Given Kafka topic: ${kafka.topic}
     Given Kafka connection
-        | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
-        | topic     | pm-data |
+      | url           | ${kafka.bootstrap.server.host}.${YAKS_NAMESPACE}:${kafka.bootstrap.server.port} |
+      | consumerGroup | pm      |
+
+  Scenario: Create Kafka topic
+    Given load Kubernetes custom resource kafka-topic.yaml in kafkatopics.kafka.strimzi.io
 
   Scenario: Run OpenAQConsumer Camel-K integration
     Given Camel-K integration property file application-test.properties
@@ -29,3 +34,6 @@ Feature: OpenAQ consumer test
       "city": "@assertThat(notNullValue())@"
     }
     """
+
+  Scenario: Remove Camel-K integrations
+    Given delete Camel-K integration open-aqconsumer

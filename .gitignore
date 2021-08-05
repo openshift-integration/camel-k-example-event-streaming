@@ -8,4 +8,8 @@
 *.iml
 /.idea
 
-target/
+# Test output folder
+_output/
+
+# Dependency library folder for IDE setup
+lib/

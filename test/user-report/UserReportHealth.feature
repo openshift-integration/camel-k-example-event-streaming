@@ -3,10 +3,16 @@ Feature: Health user report and gate-keeper component test
   Background:
     Given URL: http://user-report-system.${YAKS_NAMESPACE}.svc.cluster.local
     Given HTTP request timeout is 60000 ms
+    Given load variables application-test.properties
+    Given variables
+      | kafka.topic   | health-data |
+    Given Kafka topic: ${kafka.topic}
     Given Kafka connection
-      | url           | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
-      | topic         | health-data |
+      | url           | ${kafka.bootstrap.server.host}.${YAKS_NAMESPACE}:${kafka.bootstrap.server.port} |
       | consumerGroup | health      |
+
+  Scenario: Create Kafka topic
+    Given load Kubernetes custom resource kafka-topic.yaml in kafkatopics.kafka.strimzi.io
 
   Scenario: Run UserReportSystem Camel-K integration
     Given Camel-K integration property file application-test.properties
@@ -58,3 +64,6 @@ Feature: Health user report and gate-keeper component test
     And Camel-K integration gate-keeper should print "location": "${location}"
     And receive Kafka message on topic health-data
 
+  Scenario: Remove Camel-K integrations
+    Given delete Camel-K integration user-report-system
+    Given delete Camel-K integration gate-keeper
