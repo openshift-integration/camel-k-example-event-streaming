@@ -1,36 +1,189 @@
-# This is a basic workflow to help you get started with Actions
-
 name: tests
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches:
+      - master
+    paths-ignore:
+      - 'docs/**'
+      - '**.adoc'
+      - '**.md'
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
+    paths-ignore:
+      - 'docs/**'
+      - '**.adoc'
+      - '**.md'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    name: openshift-build
+    runs-on: ubuntu-20.04
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Cleanup
+      run: |
+        ls -lart
+        echo "Initial status:"
+        df -h
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+        echo "Cleaning up resources:"
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        docker rmi $(docker image ls -aq)
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+        echo "Final status:"
+        df -h
+    - name: Set up JDK 11
+      uses: AdoptOpenJDK/install-jdk@v1
+      with:
+        version: "11"
+    - name: Set Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.15.x
+    - name: Get OpenShift Client (oc)
+      run: |
+        export OPENSHIFT_VERSION=v3.11.0
+        export OPENSHIFT_COMMIT=0cbc58b
+        export MAVEN_OPTS=-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
+        sudo rm -f /etc/resolv.conf
+        sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+        sudo sh -c 'echo "DNS=8.8.8.8 4.4.4.4" >> /etc/systemd/resolved.conf'
+        sudo service systemd-resolved restart
+
+        # set docker0 to promiscuous mode
+        sudo ip link set docker0 promisc on
+
+        # Download and install the oc binary
+        sudo mount --make-shared /
+
+        sudo service docker stop
+        sudo echo '{"insecure-registries": ["172.30.0.0/16"]}' | sudo tee /etc/docker/daemon.json > /dev/null
+        sudo service docker start
+
+        DOWNLOAD_URL=https://github.com/openshift/origin/releases/download/$OPENSHIFT_VERSION/openshift-origin-client-tools-$OPENSHIFT_VERSION-$OPENSHIFT_COMMIT-linux-64bit.tar.gz
+        wget -O client.tar.gz ${DOWNLOAD_URL}
+        tar xvzOf client.tar.gz > oc.bin
+        sudo mv oc.bin /usr/local/bin/oc
+        sudo chmod 755 /usr/local/bin/oc
+
+    - name: Start OpenShift Cluster
+      run: |
+        # Figure out this host's IP address
+        IP_ADDR="$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
+
+        # Setup cluster dir
+        sudo mkdir -p /home/runner/lib/oc
+        sudo chmod 777 /home/runner/lib/oc
+        cd /home/runner/lib/oc
+
+        # Start OpenShift
+        oc cluster up --public-hostname=$IP_ADDR --enable=persistent-volumes,registry,router
+        oc login -u system:admin
+
+        # Wait until we have a ready node in openshift
+        TIMEOUT=0
+        TIMEOUT_COUNT=60
+        until [ $TIMEOUT -eq $TIMEOUT_COUNT ]; do
+          if [ -n "$(oc get nodes | grep Ready)" ]; then
+            break
+          fi
+          echo "openshift is not up yet"
+          TIMEOUT=$((TIMEOUT+1))
+          sleep 5
+        done
+
+        if [ $TIMEOUT -eq $TIMEOUT_COUNT ]; then
+          echo "Failed to start openshift"
+          exit 1
+        fi
+
+        echo "openshift is deployed and reachable"
+    - name: Info
+      run: |
+        oc describe nodes
+    - name: Camel K Tools
+      uses: container-tools/camel-k-action@v1
+    - name: Install Camel-K
+      run: |
+        kamel install --cluster-setup
+    - name: Install YAKS
+      env:
+        YAKS_VERSION: 0.5.0-202108050017
+        YAKS_IMAGE_NAME: docker.io/yaks/yaks
+      run: |
+        echo "Installing YAKS CLI version $YAKS_VERSION"
+
+        curl -L --silent https://github.com/citrusframework/yaks/releases/download/$YAKS_VERSION/yaks-$YAKS_VERSION-linux-64bit.tar.gz -o yaks.tar.gz
+        mkdir -p _yaks
+        tar -zxf yaks.tar.gz --directory ./_yaks
+
+        sudo mv ./_yaks/yaks /usr/local/bin/
+
+        yaks install --operator-image $YAKS_IMAGE_NAME:$YAKS_VERSION
+
+        echo "YAKS CLI installed successfully!"
+
+        rm yaks.tar.gz
+        rm -r _yaks
+    - name: Run IT
+      run: |
+        # Aggregate pod eviction permission to the default admin role
+        cat <<EOF | oc apply -f -
+        kind: ClusterRole
+        apiVersion: rbac.authorization.k8s.io/v1
+        metadata:
+          name: camel-k-test:eviction
+          labels:
+            app: "camel-k"
+            rbac.authorization.k8s.io/aggregate-to-admin: "true"
+        rules:
+        - apiGroups: [""]
+          resources: ["pods/eviction"]
+          verbs: ["create"]
+        EOF
+
+        # Aggregate nodes permission to the default admin role
+        cat <<EOF | oc apply -f -
+        kind: ClusterRole
+        apiVersion: rbac.authorization.k8s.io/v1
+        metadata:
+          name: camel-k-test:nodes
+        rules:
+        - apiGroups: [""]
+          resources: ["nodes"]
+          verbs: ["get","list"]
+        EOF
+        cat <<EOF | oc apply -f -
+        kind: ClusterRoleBinding
+        apiVersion: rbac.authorization.k8s.io/v1
+        metadata:
+          name: camel-k-test:nodes
+        subjects:
+        - kind: User
+          name: developer
+        roleRef:
+          kind: ClusterRole
+          name: camel-k-test:nodes
+          apiGroup: rbac.authorization.k8s.io
+        EOF
+
+        # Then run integration tests
+        yaks run test/consumers
+        yaks run test/bridges
+        yaks run test/user-report
