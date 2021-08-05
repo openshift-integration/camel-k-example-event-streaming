@@ -2,14 +2,25 @@
 Feature: Pollution bridge test
 
   Background:
-    Given Disable auto removal of Camel-K resources
-    Given Disable variable support in Camel-K sources
+    Given load variables application-test.properties
+    Given variables
+      | kafka.topic      | pm-data |
+    Given Kafka topic: ${kafka.topic}
     Given Kafka connection
-        | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
-        | topic     | pm-data |
+      | url           | ${kafka.bootstrap.server.host}.${YAKS_NAMESPACE}:${kafka.bootstrap.server.port} |
+      | consumerGroup | pm-bridge |
     And JMS connection factory
-        | type      | org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory |
-        | brokerUrl | tcp://broker-hdls-svc:61616 |
+      | type      | org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory |
+      | brokerUrl | ${messaging.broker.url} |
+
+  Scenario: Create Kafka topic
+    Given load Kubernetes custom resource kafka-topic.yaml in kafkatopics.kafka.strimzi.io
+
+  Scenario: Create ActiveMQ address
+    Given variable activemq.address is "alarms"
+    Given load Kubernetes custom resource activemq-address.yaml in activemqartemisaddresses.broker.amq.io
+    Given variable activemq.address is "notifications"
+    Given load Kubernetes custom resource activemq-address.yaml in activemqartemisaddresses.broker.amq.io
 
   Scenario: Run PollutionBridge Camel-K integration
     Given Camel-K integration property file application-test.properties
@@ -78,3 +89,6 @@ Feature: Pollution bridge test
       "severity": "yellow"
     }
     """
+
+  Scenario: Remove Camel-K integrations
+    Given delete Camel-K integration pollution-bridge
