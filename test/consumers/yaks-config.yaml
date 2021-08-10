@@ -1,6 +1,11 @@
 config:
   namespace:
     temporary: true
+  runtime:
+    resources:
+      - ../../OpenAQConsumer.java
+      - ../../EarthquakeConsumer.java
+      - ../application-test.properties
 pre:
   - name: Kafka setup
     script: ../scripts/installAMQStreams.sh
@@ -12,5 +17,3 @@ pre:
       # move to project home to verify provided kamel-config.yaml
       cd ../..
       kamel install -w -n ${YAKS_NAMESPACE}
-      kamel run OpenAQConsumer.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p consumers.fetch.url=http://openaq-mock:8080/measurements.json
-      kamel run EarthquakeConsumer.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092
