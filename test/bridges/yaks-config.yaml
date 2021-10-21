@@ -1,20 +1,31 @@
 config:
-  namespace:
-    temporary: true
   runtime:
+    env:
+      - name: YAKS_CAMELK_AUTO_REMOVE_RESOURCES
+        value: false
+      - name: YAKS_KUBERNETES_AUTO_REMOVE_RESOURCES
+        value: false
+      - name: YAKS_CAMELK_SUPPORT_VARIABLES_IN_SOURCES
+        value: false
     resources:
       - ../../CrimeBridge.java
       - ../../EarthquakeBridge.java
       - ../../HealthBridge.java
       - ../../PollutionBridge.java
       - ../application-test.properties
+      - ../infra/kafka-topic.yaml
+      - ../infra/activemq-address.yaml
 pre:
   - name: Kafka setup
-    script: ../scripts/installAMQStreams.sh
+    if: env:CI=true
+    script: ../scripts/install-kafka.sh
   - name: AMQ Broker setup
-    script: ../scripts/installAMQBroker.sh
-  - name: Camel-K setup
+    if: env:CI=true
+    script: ../scripts/install-amq-broker.sh
+  - name: RBAC setup
+    if: env:CI=true
     run: |
-      # move to project home to verify provided kamel-config.yaml
-      cd ../..
-      kamel install -w -n ${YAKS_NAMESPACE}
+      yaks role --add strimzi
+      yaks role --add ../infra/role-activemq.yaml
+      yaks role --add ../infra/role-binding-activemq.yaml
+
