@@ -1,5 +1,5 @@
 // camel-k: language=java property=file:application.properties
-// camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming
+// camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming:main-SNAPSHOT
 // camel-k: secret=example-event-streaming-user-reporting
 
 import java.util.Arrays;

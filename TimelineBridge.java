@@ -1,5 +1,5 @@
 // camel-k: language=java property=file:application.properties property=quarkus.http.cors=true
-// camel-k: dependency=camel-jackson dependency=github:openshift-integration:camel-k-example-event-streaming
+// camel-k: dependency=camel-jackson dependency=github:openshift-integration:camel-k-example-event-streaming:main-SNAPSHOT
 
 import java.util.ArrayList;
 import java.util.List;
