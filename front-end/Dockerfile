@@ -4,7 +4,7 @@ ENV URL ${URL:-unset}
 ARG REPO
 ENV REPO ${REPO:-https://github.com/openshift-integration/camel-k-example-event-streaming}
 ARG BRANCH
-ENV BRANCH ${BRANCH:-master}
+ENV BRANCH ${BRANCH:-main}
 RUN mkdir tmp && \
 	curl --output project.zip -LOk ${REPO}/archive/${BRANCH}.zip && \
 	unzip project.zip && \
