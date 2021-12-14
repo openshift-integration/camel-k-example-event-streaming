@@ -1,5 +1,5 @@
 // camel-k: language=java property=file:application.properties
-// camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming:main-SNAPSHOT
+// camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming:1.6.x-SNAPSHOT
 // camel-k: dependency=camel-http
 // camel-k: dependency=camel-quarkus-http
 
