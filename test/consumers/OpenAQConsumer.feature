@@ -3,7 +3,7 @@ Feature: OpenAQ consumer test
 
   Background:
     Given Kafka connection
-        | url       | event-streaming-kafka-cluster-kafka-brokers:9094 |
+        | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
         | topic     | pm-data |
 
   Scenario: OpenAQConsumer pulls from OpenAQ API and pushes events to Kafka
