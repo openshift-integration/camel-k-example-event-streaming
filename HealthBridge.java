@@ -1,5 +1,6 @@
 // camel-k: language=java property=file:application.properties
-// camel-k: dependency=mvn:org.amqphub.quarkus:quarkus-qpid-jms dependency=github:openshift-integration:camel-k-example-event-streaming:1.6.x-SNAPSHOT
+// camel-k: dependency=mvn:org.amqphub.quarkus:quarkus-qpid-jms
+// camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming:1.6.x-SNAPSHOT
 
 import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;

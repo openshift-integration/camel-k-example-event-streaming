@@ -2,17 +2,34 @@
 Feature: Earthquake bridge test
 
   Background:
+    Given load variables application-test.properties
+    Given variables
+      | kafka.topic      | earthquake-data |
+    Given Kafka topic: ${kafka.topic}
     Given Kafka connection
-        | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
-        | topic     | earthquake-data |
+      | url           | ${kafka.bootstrap.server.host}.${YAKS_NAMESPACE}:${kafka.bootstrap.server.port} |
+      | consumerGroup | earthquake-bridge |
     And JMS connection factory
-        | type      | org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory |
-        | brokerUrl | tcp://broker-hdls-svc:61616     |
+      | type      | org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory |
+      | brokerUrl | ${messaging.broker.url} |
+
+  Scenario: Create Kafka topic
+    Given load Kubernetes custom resource kafka-topic.yaml in kafkatopics.kafka.strimzi.io
+
+  Scenario: Create ActiveMQ address
+    Given variable activemq.address is "alarms"
+    Given load Kubernetes custom resource activemq-address.yaml in activemqartemisaddresses.broker.amq.io
+    Given variable activemq.address is "notifications"
+    Given load Kubernetes custom resource activemq-address.yaml in activemqartemisaddresses.broker.amq.io
+
+  Scenario: Run EarthquakeBridge Camel-K integration
+    Given Camel-K integration property file application-test.properties
+    Then load Camel-K integration EarthquakeBridge.java
 
   Scenario: Alerts ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
-    And Camel-K integration earthquake-bridge is running
+    And Camel-K integration earthquake-bridge should be running
     When send Kafka message with body
     """
     {
@@ -67,7 +84,7 @@ Feature: Earthquake bridge test
       "severity": "red"
     }
     """
-    
+
 Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
@@ -185,4 +202,7 @@ Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and qu
       "severity": "red"
     }
     """
-    
+
+  Scenario: Remove Camel-K integrations
+    Given delete Camel-K integration earthquake-bridge
+

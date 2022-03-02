@@ -1,18 +1,31 @@
 config:
-  namespace:
-    temporary: true
+  runtime:
+    env:
+      - name: YAKS_CAMELK_AUTO_REMOVE_RESOURCES
+        value: false
+      - name: YAKS_KUBERNETES_AUTO_REMOVE_RESOURCES
+        value: false
+      - name: YAKS_CAMELK_SUPPORT_VARIABLES_IN_SOURCES
+        value: false
+    resources:
+      - ../../UserReportSystem.java
+      - ../../GateKeeper.java
+      - ../application-test.properties
+      - ../infra/kafka-topic.yaml
 pre:
-  - name: Knative channel setup
-    run: oc create -f ../../infra/knative/channels/audit-channel.yaml -n ${YAKS_NAMESPACE}
+  - name: Knative setup
+    run: kubectl apply -f ../../infra/knative/channels/audit-channel.yaml -n ${YAKS_NAMESPACE}
   - name: Create secret
-    run: oc create secret generic example-event-streaming-user-reporting --from-file ../../application.properties -n ${YAKS_NAMESPACE}
-  - name: Kafka setup
-    script: ../scripts/installAMQStreams.sh
-  - name: Camel-K setup
     run: |
-      # move to project home to verify provided kamel-config.yaml
-      cd ../..
-      kamel install -w -n ${YAKS_NAMESPACE}
-      kamel run UserReportSystem.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -t knative-service.min-scale=1
-      kamel run GateKeeper.java -n ${YAKS_NAMESPACE} -t knative-service.min-scale=1
-
+      kubectl create secret generic example-event-streaming-user-reporting --from-file ../application-test.properties -n ${YAKS_NAMESPACE}
+  - name: Kafka setup
+    if: env:CI=true
+    script: ../scripts/install-kafka.sh
+  - name: RBAC setup
+    if: env:CI=true
+    run: |
+      yaks role --add strimzi
+post:
+  - name: Delete secret
+    run: |
+      kubectl delete secret example-event-streaming-user-reporting -n ${YAKS_NAMESPACE}

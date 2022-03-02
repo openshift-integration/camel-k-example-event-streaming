@@ -1,10 +1,22 @@
 @require('com.consol.citrus:citrus-validation-hamcrest:@citrus.version@')
+@require('org.hamcrest:hamcrest:2.2')
 Feature: Earthquake consumer test
 
   Background:
+    Given load variables application-test.properties
+    Given variables
+      | kafka.topic   | earthquake-data |
+    Given Kafka topic: ${kafka.topic}
     Given Kafka connection
-        | url       | event-streaming-kafka-cluster-kafka-bootstrap:9092 |
-        | topic     | earthquake-data |
+      | url           | ${kafka.bootstrap.server.host}.${YAKS_NAMESPACE}:${kafka.bootstrap.server.port} |
+      | consumerGroup | earthquake      |
+
+  Scenario: Create Kafka topic
+    Given load Kubernetes custom resource kafka-topic.yaml in kafkatopics.kafka.strimzi.io
+
+  Scenario: Run EarthquakeConsumer Camel-K integration
+    Given Camel-K integration property file application-test.properties
+    Then load Camel-K integration EarthquakeConsumer.java
 
   Scenario: EarthquakeConsumer pulls from USGS Earthquake API and pushes events to Kafka
     Given Camel-K integration earthquake-consumer is running
@@ -47,3 +59,6 @@ Feature: Earthquake consumer test
       "id": "@assertThat(notNullValue())@"
     }
     """
+
+  Scenario: Remove Camel-K integrations
+    Given delete Camel-K integration earthquake-consumer

@@ -1,16 +1,29 @@
 config:
-  namespace:
-    temporary: true
+  runtime:
+    env:
+      - name: YAKS_CAMELK_AUTO_REMOVE_RESOURCES
+        value: false
+      - name: YAKS_KUBERNETES_AUTO_REMOVE_RESOURCES
+        value: false
+      - name: YAKS_CAMELK_SUPPORT_VARIABLES_IN_SOURCES
+        value: false
+    resources:
+      - ../../OpenAQConsumer.java
+      - ../../EarthquakeConsumer.java
+      - ../application-test.properties
+      - ../infra/kafka-topic.yaml
 pre:
   - name: Kafka setup
-    script: ../scripts/installAMQStreams.sh
-  - name: Mock openaq service
+    if: env:CI=true
+    script: ../scripts/install-kafka.sh
+  - name: RBAC setup
+    if: env:CI=true
     run: |
-        oc create -n ${YAKS_NAMESPACE} -f openaq-mock.yaml
-  - name: Camel-K setup
+      yaks role --add strimzi
+  - name: Add openaq service
     run: |
-      # move to project home to verify provided kamel-config.yaml
-      cd ../..
-      kamel install -w -n ${YAKS_NAMESPACE}
-      kamel run OpenAQConsumer.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092 -p consumers.fetch.url=http://openaq-mock:8080/measurements.json
-      kamel run EarthquakeConsumer.java -n ${YAKS_NAMESPACE} -p kafka.bootstrap.address=event-streaming-kafka-cluster-kafka-bootstrap:9092
+      kubectl create -f openaq-mock.yaml -n ${YAKS_NAMESPACE}
+post:
+  - name: Remove openaq service
+    run: |
+      kubectl delete deployments,services,configmaps -l app=nginx-openaq -n ${YAKS_NAMESPACE}
