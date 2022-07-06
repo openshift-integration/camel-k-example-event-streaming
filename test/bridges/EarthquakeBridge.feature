@@ -22,14 +22,14 @@ Feature: Earthquake bridge test
     Given variable activemq.address is "notifications"
     Given load Kubernetes custom resource activemq-address.yaml in activemqartemisaddresses.broker.amq.io
 
-  Scenario: Run EarthquakeBridge Camel-K integration
-    Given Camel-K integration property file application-test.properties
-    Then load Camel-K integration EarthquakeBridge.java
+  Scenario: Run EarthquakeBridge Camel K integration
+    Given Camel K integration property file application-test.properties
+    Then load Camel K integration EarthquakeBridge.java
 
   Scenario: Alerts ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
-    And Camel-K integration earthquake-bridge should be running
+    And Camel K integration earthquake-bridge should be running
     When send Kafka message with body
     """
     {
@@ -88,7 +88,7 @@ Feature: Earthquake bridge test
 Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
-    And Camel-K integration earthquake-bridge is running
+    And Camel K integration earthquake-bridge is running
     When send Kafka message with body
     """
     {
@@ -147,7 +147,7 @@ Scenario: Non-alert message with magnitude > 4.0 ends in JMS queue:alarms and qu
 Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
-    And Camel-K integration earthquake-bridge is running
+    And Camel K integration earthquake-bridge is running
     When send Kafka message with body
     """
     {
@@ -203,6 +203,6 @@ Scenario: Non-alert message with tsunami warning ends in JMS queue:alarms and qu
     }
     """
 
-  Scenario: Remove Camel-K integrations
-    Given delete Camel-K integration earthquake-bridge
+  Scenario: Remove Camel K integrations
+    Given delete Camel K integration earthquake-bridge
 
