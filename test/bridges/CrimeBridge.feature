@@ -22,15 +22,15 @@ Feature: Crime bridge test
     Given variable activemq.address is "notifications"
     Given load Kubernetes custom resource activemq-address.yaml in activemqartemisaddresses.broker.amq.io
 
-  Scenario: Run CrimeBridge Camel-K integration
-    Given Camel-K integration property file application-test.properties
-    Then load Camel-K integration CrimeBridge.java
+  Scenario: Run CrimeBridge Camel K integration
+    Given Camel K integration property file application-test.properties
+    Then load Camel K integration CrimeBridge.java
 
   Scenario: Alerts ends in JMS queue:alarms
     Given jms destination: alarms
     And variable location is "citrus:randomString(10)"
     And jms selector: location='${location}'
-    And Camel-K integration crime-bridge is running
+    And Camel K integration crime-bridge is running
     When send Kafka message with body
     """
       {
@@ -57,7 +57,7 @@ Feature: Crime bridge test
     Given jms destination: notifications
     And variable location is "citrus:randomString(10)"
     And jms selector: location='${location}'
-    And Camel-K integration crime-bridge is running
+    And Camel K integration crime-bridge is running
     When send Kafka message with body
     """
       {
@@ -80,5 +80,5 @@ Feature: Crime bridge test
     }
     """
 
-  Scenario: Remove Camel-K integrations
-    Given delete Camel-K integration crime-bridge
+  Scenario: Remove Camel K integrations
+    Given delete Camel K integration crime-bridge

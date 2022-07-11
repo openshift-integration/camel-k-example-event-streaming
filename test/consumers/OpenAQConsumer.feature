@@ -14,13 +14,13 @@ Feature: OpenAQ consumer test
   Scenario: Create Kafka topic
     Given load Kubernetes custom resource kafka-topic.yaml in kafkatopics.kafka.strimzi.io
 
-  Scenario: Run OpenAQConsumer Camel-K integration
-    Given Camel-K integration property file application-test.properties
-    Then load Camel-K integration OpenAQConsumer.java
+  Scenario: Run OpenAQConsumer Camel K integration
+    Given Camel K integration property file application-test.properties
+    Then load Camel K integration OpenAQConsumer.java
 
   Scenario: OpenAQConsumer pulls from OpenAQ API and pushes events to Kafka
-    Given Camel-K integration open-aqconsumer is running
-    Then Camel-K integration open-aqconsumer should print Received message from OpenAQ
+    Given Camel K integration open-aqconsumer is running
+    Then Camel K integration open-aqconsumer should print Received message from OpenAQ
     And expect Kafka message with body
     """
     {
@@ -35,5 +35,5 @@ Feature: OpenAQ consumer test
     }
     """
 
-  Scenario: Remove Camel-K integrations
-    Given delete Camel-K integration open-aqconsumer
+  Scenario: Remove Camel K integrations
+    Given delete Camel K integration open-aqconsumer

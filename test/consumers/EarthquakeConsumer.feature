@@ -14,13 +14,13 @@ Feature: Earthquake consumer test
   Scenario: Create Kafka topic
     Given load Kubernetes custom resource kafka-topic.yaml in kafkatopics.kafka.strimzi.io
 
-  Scenario: Run EarthquakeConsumer Camel-K integration
-    Given Camel-K integration property file application-test.properties
-    Then load Camel-K integration EarthquakeConsumer.java
+  Scenario: Run EarthquakeConsumer Camel K integration
+    Given Camel K integration property file application-test.properties
+    Then load Camel K integration EarthquakeConsumer.java
 
   Scenario: EarthquakeConsumer pulls from USGS Earthquake API and pushes events to Kafka
-    Given Camel-K integration earthquake-consumer is running
-    Then Camel-K integration earthquake-consumer should print Received message from USGS Earthquake Alert System
+    Given Camel K integration earthquake-consumer is running
+    Then Camel K integration earthquake-consumer should print Received message from USGS Earthquake Alert System
     And expect Kafka message with body
     """
     {
@@ -60,5 +60,5 @@ Feature: Earthquake consumer test
     }
     """
 
-  Scenario: Remove Camel-K integrations
-    Given delete Camel-K integration earthquake-consumer
+  Scenario: Remove Camel K integrations
+    Given delete Camel K integration earthquake-consumer

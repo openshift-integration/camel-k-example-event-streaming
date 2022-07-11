@@ -22,15 +22,15 @@ Feature: Pollution bridge test
     Given variable activemq.address is "notifications"
     Given load Kubernetes custom resource activemq-address.yaml in activemqartemisaddresses.broker.amq.io
 
-  Scenario: Run PollutionBridge Camel-K integration
-    Given Camel-K integration property file application-test.properties
-    Then load Camel-K integration PollutionBridge.java
+  Scenario: Run PollutionBridge Camel K integration
+    Given Camel K integration property file application-test.properties
+    Then load Camel K integration PollutionBridge.java
 
   Scenario: Short term alerts ends in JMS queue:alarms
     Given jms destination: alarms
     And variable uniqueCity is "citrus:randomString(10)"
     And jms selector: city='${uniqueCity}'
-    And Camel-K integration pollution-bridge is running
+    And Camel K integration pollution-bridge is running
     When send Kafka message with body
     """
     {
@@ -62,7 +62,7 @@ Feature: Pollution bridge test
     Given jms destination: notifications
     And variable uniqueCity is "citrus:randomString(10)"
     And jms selector: city='${uniqueCity}'
-    And Camel-K integration pollution-bridge is running
+    And Camel K integration pollution-bridge is running
     When send Kafka message with body
     """
     {
@@ -90,5 +90,5 @@ Feature: Pollution bridge test
     }
     """
 
-  Scenario: Remove Camel-K integrations
-    Given delete Camel-K integration pollution-bridge
+  Scenario: Remove Camel K integrations
+    Given delete Camel K integration pollution-bridge
