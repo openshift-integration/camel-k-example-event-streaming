@@ -12,6 +12,11 @@ config:
       - ../../EarthquakeConsumer.java
       - ../application-test.properties
       - ../infra/kafka-topic.yaml
+  dump:
+    enabled: true
+    failedOnly: true
+    includes:
+      - app=camel-k
 pre:
   - name: Kafka setup
     if: env:CI=true
@@ -27,3 +32,6 @@ post:
   - name: Remove openaq service
     run: |
       kubectl delete deployments,services,configmaps -l app=nginx-openaq -n ${YAKS_NAMESPACE}
+  - name: print dump
+    if: env:CI=true && failure()
+    run: kamel dump

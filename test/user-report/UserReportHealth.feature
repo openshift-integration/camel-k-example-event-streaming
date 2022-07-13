@@ -14,17 +14,17 @@ Feature: Health user report and gate-keeper component test
   Scenario: Create Kafka topic
     Given load Kubernetes custom resource kafka-topic.yaml in kafkatopics.kafka.strimzi.io
 
-  Scenario: Run UserReportSystem Camel-K integration
-    Given Camel-K integration property file application-test.properties
-    When load Camel-K integration UserReportSystem.java with configuration
+  Scenario: Run UserReportSystem Camel K integration
+    Given Camel K integration property file application-test.properties
+    When load Camel K integration UserReportSystem.java with configuration
       | traits | knative-service.min-scale=1 |
-    Then Camel-K integration user-report-system should be running
+    Then Camel K integration user-report-system should be running
 
-  Scenario: Run GateKeeper Camel-K integration
-    Given Camel-K integration property file application-test.properties
-    When load Camel-K integration GateKeeper.java with configuration
+  Scenario: Run GateKeeper Camel K integration
+    Given Camel K integration property file application-test.properties
+    When load Camel K integration GateKeeper.java with configuration
       | traits | knative-service.min-scale=1 |
-    Given Camel-K integration gate-keeper should be running
+    Given Camel K integration gate-keeper should be running
 
   Scenario: Health report is send to health-data topic
     Given variable user is "user1"
@@ -61,9 +61,9 @@ Feature: Health user report and gate-keeper component test
         }
       }
     """
-    And Camel-K integration gate-keeper should print "location": "${location}"
+    And Camel K integration gate-keeper should print "location": "${location}"
     And receive Kafka message on topic health-data
 
-  Scenario: Remove Camel-K integrations
-    Given delete Camel-K integration user-report-system
-    Given delete Camel-K integration gate-keeper
+  Scenario: Remove Camel K integrations
+    Given delete Camel K integration user-report-system
+    Given delete Camel K integration gate-keeper

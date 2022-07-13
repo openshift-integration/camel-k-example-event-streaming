@@ -15,6 +15,11 @@ config:
       - ../application-test.properties
       - ../infra/kafka-topic.yaml
       - ../infra/activemq-address.yaml
+  dump:
+    enabled: true
+    failedOnly: true
+    includes:
+      - app=camel-k
 pre:
   - name: Kafka setup
     if: env:CI=true
@@ -28,4 +33,7 @@ pre:
       yaks role --add strimzi
       yaks role --add ../infra/role-activemq.yaml
       yaks role --add ../infra/role-binding-activemq.yaml
-
+post:
+  - name: print dump
+    if: env:CI=true && failure()
+    run: kamel dump

@@ -12,6 +12,11 @@ config:
       - ../../GateKeeper.java
       - ../application-test.properties
       - ../infra/kafka-topic.yaml
+  dump:
+    enabled: true
+    failedOnly: true
+    includes:
+      - app=camel-k
 pre:
   - name: Knative setup
     run: kubectl apply -f ../../infra/knative/channels/audit-channel.yaml -n ${YAKS_NAMESPACE}
@@ -29,3 +34,6 @@ post:
   - name: Delete secret
     run: |
       kubectl delete secret example-event-streaming-user-reporting -n ${YAKS_NAMESPACE}
+  - name: print dump
+    if: env:CI=true && failure()
+    run: kamel dump
