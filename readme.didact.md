@@ -220,7 +220,7 @@ expected defaults, so no action should be needed.
 
 #### Optional: Configuration Adjustments
 
-*Note*: you can skip this step if you don't want to adjust the configuration
+*Note*: you can skip this step if you don't want to adjust the configuration, but if you changed any of the namespaces or the service name, you should retrieve the correct addresses to set in the `application.properties` file.
 
 In case you need to adjust the configuration, the following 2 commands present information that will be required to configure the deployment:
 
@@ -228,9 +228,20 @@ In case you need to adjust the configuration, the following 2 commands present i
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20services%20-n%20event-streaming-messaging-broker&completion=Get%20the%20AMQ%20Broker%20services. "Get the AMQ Broker services"){.didact})
 
-```oc get services -n event-streaming-kafka-cluster```
+Get the kafka broker address:
 
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20get%20services%20-n%20event-streaming-kafka-cluster&completion=Get%20the%20AMQ%20Streams%20services. "Get the AMQ Streams services"){.didact})
+```
+oc -n event-streaming-kafka-cluster get kafka/event-streaming-kafka-cluster -ojsonpath='{.status.listeners[?(@.name=="plain")].bootstrapServers}'
+```
+
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20-n%20event-streaming-kafka-cluster%20get%20kafka/event-streaming-kafka-cluster%20-ojsonpath='{.status.listeners[?(@.name=="plain")].bootstrapServers}'&completion=Get%20the%20AMQ%20Streams%20services. "Get the AMQ Streams services"){.didact})
+
+Or if you prefer to use this handy script to set it for you
+```
+kafka=$(oc get kafka/event-streaming-kafka-cluster -ojsonpath='{.status.listeners[?(@.name=="plain")].bootstrapServers}'); sed -i "/kafka.bootstrap.address/ s/=.*/=$kafka/g" application.properties
+```
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kafka=$(oc%20get%20kafka/event-streaming-kafka-cluster%20-ojsonpath='{.status.listeners[?(@.name=="plain")].bootstrapServers}');%20sed%20-i%20"/kafka.bootstrap.address/%20s/=.*/=$kafka/g"%20application.properties&completion=Set%20the%20Kafka%20Address. "Set the Kafka Address"){.didact})
+
 
 They provide the addresses of the services running on the cluster and can be used to fill in the values on the properties file.
 
@@ -397,3 +408,9 @@ To cleanup everything, execute the following command:
 ```oc delete project camel-k-event-streaming event-streaming-messaging-broker event-streaming-kafka-cluster```
 
 ([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$oc%20delete%20project%20camel-k-event-streaming%20event-streaming-messaging-broker%20event-streaming-kafka-cluster&completion=Removed%20the%20projects%20from%20the%20cluster. "Cleans up the cluster after running the projects"){.didact})
+
+## 5. Troubleshooting
+
+#### Too many user-report-system pods exhausting the worker node
+
+If it occurs a fast creation of many `user-report-system` pods and many of them in error state, the pod is not starting properly. As this specific integration has a `rest` endpoint and is running with Knative enabled cluster, Camel K will set this deployment as a Knative Service instead of a regular Kubernetes Deployment, then as the pod is Unhealthy, Knative Serving keeps creating other pods, this behavior may exhaust the worker node. To troubleshoot this error, run the integration with the Knative Service trait disabled by adding the parameter `-t knative-service.enabled=false` when running the `UserReportSystem.java` integration, this way a regular Kubernetes Deployment is used and only one pod is created, so having only one pod is easier to examine the pod and it's log to determine the error cause.
