@@ -1,5 +1,5 @@
 // camel-k: language=java property=file:application.properties
-// camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming:1.8.x-SNAPSHOT
+// camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming:1.10.x-SNAPSHOT
 
 import java.util.ArrayList;
 import java.util.Date;
