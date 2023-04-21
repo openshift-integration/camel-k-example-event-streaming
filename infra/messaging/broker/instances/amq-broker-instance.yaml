@@ -1,8 +1,18 @@
-apiVersion: broker.amq.io/v2alpha4
+apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
   name: broker
+  namespace: event-streaming-messaging-broker
 spec:
+  acceptors:
+    - name: artemis_acceptor
+      protocols: 'artemis,core,openwire'
+      port: 61616
+      sslEnabled: false
+    - name: amqp_acceptor
+      protocols: amqp
+      port: 5672
+      sslEnabled: false
   deploymentPlan:
     size: 1
     persistenceEnabled: false
@@ -12,12 +22,3 @@ spec:
     journalType: nio
     jolokiaAgentEnabled: false
     image: placeholder
-  acceptors:
-    - name: artemis_acceptor
-      protocols: artemis,core,openwire
-      port: 61616
-      sslEnabled: false
-    - name: amqp_acceptor
-      protocols: amqp
-      port: 5672
-      sslEnabled: false
