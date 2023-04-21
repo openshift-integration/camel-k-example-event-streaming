@@ -238,9 +238,9 @@ oc -n event-streaming-kafka-cluster get kafka/event-streaming-kafka-cluster -ojs
 
 Or if you prefer to use this handy script to set it for you
 ```
-kafka=$(oc get kafka/event-streaming-kafka-cluster -ojsonpath='{.status.listeners[?(@.name=="plain")].bootstrapServers}'); sed -i "/kafka.bootstrap.address/ s/=.*/=$kafka/g" application.properties
+kafka=$(oc get kafka/event-streaming-kafka-cluster -ojsonpath='{.status.listeners[?(@.name=="plain")].bootstrapServers}' -n event-streaming-kafka-cluster); sed -i "/kafka.bootstrap.address/ s/=.*/=$kafka/g" application.properties
 ```
-([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kafka=$(oc%20get%20kafka/event-streaming-kafka-cluster%20-ojsonpath='{.status.listeners[?(@.name=="plain")].bootstrapServers}');%20sed%20-i%20"/kafka.bootstrap.address/%20s/=.*/=$kafka/g"%20application.properties&completion=Set%20the%20Kafka%20Address. "Set the Kafka Address"){.didact})
+([^ execute](didact://?commandId=vscode.didact.sendNamedTerminalAString&text=camelTerm$$kafka=$(oc%20get%20kafka/event-streaming-kafka-cluster%20-ojsonpath='{.status.listeners[?(@.name=="plain")].bootstrapServers}'%20-n%20event-streaming-kafka-cluster);%20sed%20-i%20"/kafka.bootstrap.address/%20s/=.*/=$kafka/g"%20application.properties&completion=Set%20the%20Kafka%20Address. "Set the Kafka Address"){.didact})
 
 
 They provide the addresses of the services running on the cluster and can be used to fill in the values on the properties file.

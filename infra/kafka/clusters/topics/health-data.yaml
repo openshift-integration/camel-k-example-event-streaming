@@ -3,7 +3,7 @@ kind: KafkaTopic
 metadata:
   name: health-data
   labels:
-    strimzi.io/cluster: "event-streaming-kafka-cluster-dev"
+    strimzi.io/cluster: "event-streaming-kafka-cluster"
 spec:
   config:
     retention.ms: 604800000
