@@ -1,4 +1,4 @@
-// camel-k: language=java property=file:application.properties property=quarkus.http.cors=true
+// camel-k: language=java property=file:application.properties property=quarkus.http.cors=true property=quarkus.http.cors.headers=accept,authorization,content-type,x-requested-with,access-control-allow-origin property=quarkus.http.cors.methods=GET,OPTIONS,POST,PUT,DELETE property=quarkus.http.cors.origins=*
 // camel-k: dependency=camel:jackson
 // camel-k: dependency=github:openshift-integration:camel-k-example-event-streaming:main-SNAPSHOT
 
