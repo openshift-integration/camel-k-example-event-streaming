@@ -13,12 +13,12 @@ function waitFor() {
 
 AMQ_STREAMS_VERSION="v1.7.2"
 TIMEOUT=${TIMEOUT:-30}
-SOURCE=$(dirname "${BASH_SOURCE[0]}")
+SOURCE=$(dirname "$0")
 INFRA="${SOURCE}"/../../infra
 
-CSV=$(oc get csv amqstreams.${AMQ_STREAMS_VERSION} -n ${YAKS_NAMESPACE} || echo "ERROR: failed to find AMQ Streams CSV")
+CSV=$(oc get csv amqstreams.${AMQ_STREAMS_VERSION} -n ${YAKS_NAMESPACE} || echo "")
 #check for existing amq-streams subscription
-if [ "${CSV//ERROR/}" != "${CSV}" ]; then
+if [ -z "$CSV" ]; then
   echo "Create AMQ Streams subscription"
 
   #create OperatorGroup
