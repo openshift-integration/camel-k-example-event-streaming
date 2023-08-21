@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -17,24 +17,24 @@
 
 set -e
 
-function waitFor() {
+waitFor() {
   for i in {1..30}; do
     sleep 5
     ("$@") && return
-    echo "$i Waiting for exit code of command \"$@\"."
+    echo "$i Waiting for command to finish"
   done
   exit 1
 }
 
-SOURCE=$(dirname "${BASH_SOURCE[0]}")
+SOURCE=$(dirname "$0")
 INFRA="${SOURCE}"/../../infra
 ACTIVEMQ_VERSION=v0.19.3
 URL="https://raw.githubusercontent.com/artemiscloud/activemq-artemis-operator/${ACTIVEMQ_VERSION}"
 
-BROKER=$(kubectl get activemqartemis/broker -n ${YAKS_NAMESPACE} || echo "ERROR: failed to find AMQ Broker instance")
+BROKER=$(kubectl get activemqartemis/broker -n ${YAKS_NAMESPACE} || echo "")
 
 #check for existing amq-broker instance
-if [ "${BROKER//ERROR/}" != "${BROKER}" ]; then
+if [ -z "$BROKER" ]; then
 
   # Install AMQ Artemis
   kubectl create -f "${URL}"/deploy/service_account.yaml
