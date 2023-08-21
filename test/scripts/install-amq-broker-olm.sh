@@ -13,12 +13,12 @@ function waitFor() {
 
 AMQ_BROKER_VERSION="v7.8.2-opr-1"
 TIMEOUT=${TIMEOUT:-30}
-SOURCE=$(dirname "${BASH_SOURCE[0]}")
+SOURCE=$(dirname "$0")
 INFRA="${SOURCE}"/../../infra
 
-CSV=$(oc get csv amq-broker-operator.${AMQ_BROKER_VERSION} -n ${YAKS_NAMESPACE} || echo "ERROR: failed to find AMQ Broker CSV")
+CSV=$(oc get csv amq-broker-operator.${AMQ_BROKER_VERSION} -n ${YAKS_NAMESPACE} || echo "")
 #check for existing amq-broker subscription
-if [ "${CSV//ERROR/}" != "${CSV}" ]; then
+if [ -z "$CSV" ]; then
   echo "Create AMQ Broker subscription"
 
   #create OperatorGroup

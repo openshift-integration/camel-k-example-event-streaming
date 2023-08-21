@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -17,10 +17,10 @@
 
 set -e
 
-CLUSTER=$(kubectl get kafka/my-cluster -n ${YAKS_NAMESPACE} || echo "ERROR: failed to find AMQ Streams Kafka instance")
+CLUSTER=$(kubectl get kafka/my-cluster -n ${YAKS_NAMESPACE} || echo "")
 
 #check for existing amq-streams kafka instance
-if [ "${CLUSTER//ERROR/}" != "${CLUSTER}" ]; then
+if [ -z "$CLUSTER" ]; then
 
   # Install Kafka
   kubectl create -f https://strimzi.io/install/latest?namespace=${YAKS_NAMESPACE}
