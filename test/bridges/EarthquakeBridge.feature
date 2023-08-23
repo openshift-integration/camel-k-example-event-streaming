@@ -1,4 +1,3 @@
-@require('org.apache.activemq:artemis-jms-client:2.11.0')
 Feature: Earthquake bridge test
 
   Background:
@@ -24,12 +23,13 @@ Feature: Earthquake bridge test
 
   Scenario: Run EarthquakeBridge Camel K integration
     Given Camel K integration property file application-test.properties
-    Then load Camel K integration EarthquakeBridge.java
+    When load Camel K integration EarthquakeBridge.java
+    Then Camel K integration earthquake-bridge should be running
+    And Camel K integration earthquake-bridge should print Installed features
 
   Scenario: Alerts ends in JMS queue:alarms and queue:notifications
     Given variable title is "citrus:randomString(10)"
     And jms selector: title='${title}'
-    And Camel K integration earthquake-bridge should be running
     When send Kafka message with body
     """
     {

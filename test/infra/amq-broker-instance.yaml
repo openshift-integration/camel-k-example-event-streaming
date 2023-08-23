@@ -1,8 +1,7 @@
 apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
-  name: broker
-  namespace: event-streaming-messaging-broker
+  name: artemis-broker
 spec:
   acceptors:
     - name: artemis-acceptor
