@@ -1,4 +1,3 @@
-@require('org.apache.activemq:artemis-jms-client:2.11.0')
 Feature: Pollution bridge test
 
   Background:
@@ -24,13 +23,14 @@ Feature: Pollution bridge test
 
   Scenario: Run PollutionBridge Camel K integration
     Given Camel K integration property file application-test.properties
-    Then load Camel K integration PollutionBridge.java
+    When load Camel K integration PollutionBridge.java
+    Then Camel K integration pollution-bridge should be running
+    And Camel K integration pollution-bridge should print Installed features
 
   Scenario: Short term alerts ends in JMS queue:alarms
     Given jms destination: alarms
     And variable uniqueCity is "citrus:randomString(10)"
     And jms selector: city='${uniqueCity}'
-    And Camel K integration pollution-bridge is running
     When send Kafka message with body
     """
     {
@@ -49,7 +49,7 @@ Feature: Pollution bridge test
       "country": "CN",
       "city": "${uniqueCity}"
     }
-  """
+    """
     Then expect JMS message with body
     """
     {
@@ -62,7 +62,6 @@ Feature: Pollution bridge test
     Given jms destination: notifications
     And variable uniqueCity is "citrus:randomString(10)"
     And jms selector: city='${uniqueCity}'
-    And Camel K integration pollution-bridge is running
     When send Kafka message with body
     """
     {
