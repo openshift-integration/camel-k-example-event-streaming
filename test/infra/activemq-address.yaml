@@ -6,3 +6,4 @@ spec:
   addressName: ${activemq.address}
   queueName: ${activemq.address}
   routingType: anycast
+  removeFromBrokerOnDelete: true

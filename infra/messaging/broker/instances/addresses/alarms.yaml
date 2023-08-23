@@ -6,3 +6,4 @@ spec:
   addressName: alarms
   queueName: alarms
   routingType: anycast
+  removeFromBrokerOnDelete: true

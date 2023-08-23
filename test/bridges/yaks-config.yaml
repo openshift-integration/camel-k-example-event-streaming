@@ -7,6 +7,16 @@ config:
         value: false
       - name: YAKS_CAMELK_SUPPORT_VARIABLES_IN_SOURCES
         value: false
+    settings:
+      loggers:
+        - name: INTEGRATION_STATUS
+          level: INFO
+        - name: INTEGRATION_LOGS
+          level: INFO
+      dependencies:
+        - groupId: org.apache.activemq
+          artifactId: artemis-jms-client
+          version: 2.21.0
     resources:
       - ../../CrimeBridge.java
       - ../../EarthquakeBridge.java

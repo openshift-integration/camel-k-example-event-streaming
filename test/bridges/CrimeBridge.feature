@@ -1,4 +1,3 @@
-@require('org.apache.activemq:artemis-jms-client:2.11.0')
 Feature: Crime bridge test
 
   Background:
@@ -24,13 +23,14 @@ Feature: Crime bridge test
 
   Scenario: Run CrimeBridge Camel K integration
     Given Camel K integration property file application-test.properties
-    Then load Camel K integration CrimeBridge.java
+    When load Camel K integration CrimeBridge.java
+    Then Camel K integration crime-bridge should be running
+    And Camel K integration crime-bridge should print Installed features
 
   Scenario: Alerts ends in JMS queue:alarms
     Given jms destination: alarms
     And variable location is "citrus:randomString(10)"
     And jms selector: location='${location}'
-    And Camel K integration crime-bridge is running
     When send Kafka message with body
     """
       {
@@ -44,7 +44,7 @@ Feature: Crime bridge test
           "location": "${location}"
         }
       }
-  """
+    """
     Then expect JMS message with body
     """
     {
@@ -71,7 +71,7 @@ Feature: Crime bridge test
           "location": "${location}"
         }
       }
-  """
+    """
     Then expect JMS message with body
     """
     {
