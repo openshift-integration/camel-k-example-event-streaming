@@ -24,6 +24,7 @@ Feature: OpenAQ consumer test
     And expect Kafka message with body
     """
     {
+      "locationId": "@assertThat(nullValue())@",
       "location": "@assertThat(notNullValue())@",
       "parameter": "@assertThat(notNullValue())@",
       "date": "@assertThat(notNullValue())@",
@@ -31,7 +32,11 @@ Feature: OpenAQ consumer test
       "unit": "@assertThat(notNullValue())@",
       "coordinates": "@assertThat(notNullValue())@",
       "country": "@assertThat(notNullValue())@",
-      "city": "@assertThat(notNullValue())@"
+      "city": "@assertThat(notNullValue())@",
+      "isMobile": "@assertThat(nullValue())@",
+      "isAnalysis": "@assertThat(nullValue())@",
+      "entity": "@assertThat(nullValue())@",
+      "sensorType": "@assertThat(nullValue())@"
     }
     """
 

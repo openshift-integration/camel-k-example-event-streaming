@@ -1,7 +1,7 @@
 Feature: Health user report and gate-keeper component test
 
   Background:
-    Given URL: http://user-report-system.${YAKS_NAMESPACE}.svc.cluster.local
+    Given URL: http://user-report-system.${YAKS_NAMESPACE}
     Given HTTP request timeout is 60000 ms
     Given load variables application-test.properties
     Given variables
@@ -19,12 +19,14 @@ Feature: Health user report and gate-keeper component test
     When load Camel K integration UserReportSystem.java with configuration
       | traits | knative-service.min-scale=1 |
     Then Camel K integration user-report-system should be running
+    Then Camel K integration user-report-system should print Listening on
 
   Scenario: Run GateKeeper Camel K integration
     Given Camel K integration property file application-test.properties
     When load Camel K integration GateKeeper.java with configuration
       | traits | knative-service.min-scale=1 |
     Given Camel K integration gate-keeper should be running
+    Then Camel K integration gate-keeper should print Listening on
 
   Scenario: Health report is send to health-data topic
     Given variable user is "user1"

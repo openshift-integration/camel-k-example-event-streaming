@@ -21,16 +21,10 @@ CLUSTER=$(kubectl get kafka/my-cluster -n ${YAKS_NAMESPACE} || echo "")
 
 #check for existing amq-streams kafka instance
 if [ -z "$CLUSTER" ]; then
-
-  # Install Kafka
-  kubectl create -f https://strimzi.io/install/latest?namespace=${YAKS_NAMESPACE}
-
-  # Create the Kafka Cluster
-  kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-ephemeral-single.yaml
-
-  # Wait for everything to start
-  kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n ${YAKS_NAMESPACE}
-
+  echo "AMQ Streams Kafka instance not found"
 else
-  echo "AMQ Streams Kafka instance already exists"
+  # Delete the Kafka Cluster
+  kubectl delete kafka/my-cluster -n ${YAKS_NAMESPACE}
+
+  kubectl delete -f https://strimzi.io/install/latest?namespace=${YAKS_NAMESPACE}
 fi
