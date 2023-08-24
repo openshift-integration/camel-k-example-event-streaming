@@ -36,7 +36,7 @@ instruct the operator to deploy a broker according to the configuration.
 You need to create the `event-streaming-messaging-broker` project from the OpenShift web console or by executing the command `oc new-project event-streaming-messaging-broker` on a terminal window.
 
 Now, we can go to the OpenShift 4.x WebConsole page, use the OperatorHub menu item on the left hand side menu and use it to find and install **"Red Hat Integration - AMQ Broker"**.
-This will install the operator and may take a couple minutes to install.
+This will install the operator and may take a couple of minutes to install.
 
 ### Installing OpenShift Serverless
 
@@ -89,7 +89,7 @@ The system consumes data from sources such as OpenAQ API (an open API that is us
 USGS Earthquake Hazards Program, etc to consume data about hazards and present information about them and warn the user
 when certain incidents happen.
 
-![Diagram](https://raw.githubusercontent.com/openshift-integration/camel-k-example-event-streaming/master/docs/Diagram.png)
+![Diagram](https://raw.githubusercontent.com/openshift-integration/camel-k-example-event-streaming/main/docs/Diagram.png)
 
 ## 1. Creating the AMQ Streams Cluster
 
