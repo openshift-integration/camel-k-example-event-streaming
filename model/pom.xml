@@ -6,7 +6,7 @@
 
   <groupId>com.github.openshift-integration</groupId>
   <artifactId>camel-k-example-event-streaming</artifactId>
-  <version>1.10.x-SNAPSHOT</version>
+  <version>main-SNAPSHOT</version>
 
   <name>camel-k-example-event-streaming-model</name>
 
