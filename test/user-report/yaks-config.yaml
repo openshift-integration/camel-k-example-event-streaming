@@ -31,6 +31,9 @@ pre:
     run: |
       yaks role --add strimzi
 post:
+  - name: Wait for service termination
+    run: |
+      kubectl wait --for=delete service/user-report-system --timeout=60s -n ${YAKS_NAMESPACE}
   - name: Delete secret
     run: |
       kubectl delete secret example-event-streaming-user-reporting -n ${YAKS_NAMESPACE}
