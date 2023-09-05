@@ -114,7 +114,8 @@ jobs:
         run: |
           # Then run integration tests
           yaks run test/consumers $YAKS_RUN_OPTIONS
-          yaks run test/user-report $YAKS_RUN_OPTIONS
+          yaks run test/user-report/UserReportCrime.feature $YAKS_RUN_OPTIONS
+          yaks run test/user-report/UserReportHealth.feature $YAKS_RUN_OPTIONS
           yaks run test/bridges $YAKS_RUN_OPTIONS
       - name: YAKS Report
         if: failure()
